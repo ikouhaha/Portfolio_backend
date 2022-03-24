@@ -1,19 +1,16 @@
 
 
-const bcrypt = require('bcrypt');
-
-const saltRounds = 10;
-
+const bcrypt = require('bcryptjs');
 
 exports.getHash = (str) => {
-    let rv = "";
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(str, salt, function (err, hash) {
-            // returns hash
-            console.log(hash);
-            rv = hash
-        });
-    });
-    return rv;
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(str, salt);
+    return hash;
 }
 
+
+exports.comparePwd = (pwd,hash) => {
+    return bcrypt.compareSync(pwd,hash)
+}
+
+//console.log(this.getHash("123"));

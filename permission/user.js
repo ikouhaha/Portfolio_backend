@@ -20,8 +20,9 @@ ac.grant('admin')
 exports.readAll = (requester) =>   ac.can(requester.role).execute('read').sync().on('users')
 
 
-exports.read = (requester, data) => ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('read').sync().on('user')
+exports.read = (requester, data) => ac.can(requester.role)
+.context({requester:requester.id, owner:data.id}).execute('read').sync().on('user')
 
-exports.update = (requester, data) => ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('update').sync().on('user') 
+exports.update = (requester, data) => ac.can(requester.role).context({requester:requester.id, owner:data.id}).execute('update').sync().on('user') 
 
-exports.delete = (requester, data) =>  ac.can(requester.role).context({requester:requester.ID, owner:data.ID}).execute('delete').sync().on('user')
+exports.delete = (requester, data) =>  ac.can(requester.role).context({requester:requester.id, owner:data.id}).execute('delete').sync().on('user')

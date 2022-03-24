@@ -1,0 +1,38 @@
+{
+  "name": "portfolio_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonschema": "^1.4.0",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-passport": "^4.1.4",
+    "koa-router": "^10.1.1",
+    "koa-static-router": "^1.5.0",
+    "mongodb": "^4.4.1",
+    "passport-http": "^0.3.0",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "readline-sync": "^1.4.10",
+    "redoc": "^2.0.0-rc.65",
+    "request": "^2.88.2",
+    "role-acl": "^4.5.4",
+    "sequelize": "^6.17.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikouhaha/Portfolio_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ikouhaha/Portfolio_backend/issues"
+  },
+  "homepage": "https://github.com/ikouhaha/Portfolio_backend#readme"
+}
