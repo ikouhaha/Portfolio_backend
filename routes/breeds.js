@@ -48,12 +48,7 @@ async function getById(ctx) {
 
 async function create(ctx) {
   const body = ctx.request.body
-  let result;
-  if (Array.isArray(body)) {
-    result = await model.addMany(body)
-  } else {
-    result = await model.add(body)
-  }
+  let result = await model.add(body)
 
   if (result) {
     ctx.status = 201

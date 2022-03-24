@@ -9,7 +9,7 @@ exports.getAll =  async function getAll (page, limite, order) {
   }
   
   exports.getById=  async function getById (id) {
-    let data = await db.run_query(collection, {'authorID': parseInt(id)})
+    let data = await db.run_query(collection, {'id': parseInt(id)})
     return data
   }
   
