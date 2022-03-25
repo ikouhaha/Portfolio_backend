@@ -12,7 +12,7 @@ CREATE TABLE public.users (
 	about text NULL,
 	dateregistered timestamp NOT NULL DEFAULT now(),
 	"password" varchar(100) NULL,
-	passwordsalt varchar(16) NULL,
+	--passwordsalt varchar(100) NULL,
 	email varchar(64) NOT NULL,
 	avatarurl varchar(64) NULL,
 	"role" varchar(16) NULL DEFAULT 'user'::character varying,
