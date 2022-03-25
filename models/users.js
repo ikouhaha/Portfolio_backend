@@ -1,26 +1,28 @@
 const db = require('../helpers/mongodb')
 
 
-const collection = "articles"
+const collection = "users"
 
 exports.findByUsername = async function (username) {
-  const query = 'select * from users where username = ?'
-  const user = await db.run_query(query, [username])
-  return user
+  let data = await db.run_query(collection, {'username': username})
+  return data
 }
 
 //list all the articles in the database
-exports.getAll = async function () {
+// exports.getAll = async function () {
   
-  let query = "select * FROM users;"
-  let data = await db.run_query(query)  
+//   let query = "select * FROM users;"
+//   let data = await db.run_query(query)  
+//   return data
+// }
+
+exports.getAll = async function () {
+  let data = await db.run_query(collection, {})
   return data
 }
 
 exports.getById = async function (id) {
-  
-  let query = "select * FROM users where id = ?;"
-  let data = await db.run_query(query,[id])  
+  let data = await db.run_query(collection, {})
   return data
 }
 
