@@ -3,51 +3,147 @@ const bodyParser = require('koa-bodyparser')
 const model = require('../models/users')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
-const router = Router({prefix: '/api/v1/users'})
+const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
-const {validateUser} = require('../controllers/validation')
+const { validateUser } = require('../controllers/validation')
 
 router.get('/', auth, getAll)
-router.get('/:id([0-9]{1,})',auth, getById);
+router.get('/:id([0-9]{1,})', auth, getById);
 router.post('/', bodyParser(), validateUser, createUser) //for public user register
+router.put('/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUser)
+router.del('/:id([0-9]{1,})',bodyParser(),auth, validateUser, deleteUser)
+router.put('/p/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUserPwd)
 
 async function getAll(ctx) {
-  const permission = can.readAll(ctx.state.user)
-  if (!permission.granted) {
-    ctx.status = 403;
-  } else {
-    const result = await model.getAll()
-    if (result.length) {
-      ctx.body = result;
-    }    
+  try {
+    const permission = can.readAll(ctx.state.user)
+    if (!permission.granted) {
+      ctx.status = 403;
+    } else {
+      const result = await model.getAll()
+      if (result.length) {
+        ctx.body = result;
+      }
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx,ex)
+
   }
 }
 
 async function getById(ctx) {
-  let id = parseInt(ctx.params.id)
-  const permission = can.read(ctx.state.user,{"id":id})
-  if (!permission.granted) {
-    ctx.status = 403;
-  } else {
-    const result = await model.getById(id)
-    if (result.length) {
-      ctx.body = result;
-    }    
+  try {
+    let id = parseInt(ctx.params.id)
+    const permission = can.read(ctx.state.user, { "id": id })
+    if (!permission.granted) {
+      ctx.status = 403;
+    } else {
+      const result = await model.getById(id)
+      if (result.length) {
+        ctx.body = result;
+      }
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx,ex)
+
   }
 }
 
 async function createUser(ctx) {
-  const body = ctx.request.body
-  body.dateRegistered = new Date()
-  body.password = util.getHash(body.password)
-  let result = await model.createUser(body)
-  if (result) {
-    ctx.status = 201
-    ctx.body = result
-  } else {
-    ctx.status=201
-    ctx.body = "{}"
+  try {
+    const body = ctx.request.body
+    body.dateRegistered = new Date()
+    body.password = util.getHash(body.password)
+    let result = await model.createUser(body)
+    if (result) {
+      ctx.status = 201
+      ctx.body = result
+    } else {
+      ctx.status = 201
+      ctx.body = "{}"
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx,ex)
+
+  }
+
+}
+
+async function deleteUser(ctx) {
+
+  try {
+    let id = parseInt(ctx.params.id)
+    const body = ctx.request.body
+    const permission = can.delete(ctx.state.user,body)
+    if (!permission.granted) {
+      ctx.status = 403;
+    }
+    let result = await model.deleteUser(id)
+    if (result) {
+      ctx.status = 201
+      ctx.body = result
+    } else {
+      ctx.status = 201
+      ctx.body = "{}"
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx,ex)
+
   }
 }
+
+async function updateUser(ctx) {
+
+  try {
+    let id = parseInt(ctx.params.id)
+    const body = ctx.request.body
+    const permission = can.update(ctx.state.user,body)
+    if (!permission.granted) {
+      ctx.status = 403;
+    }
+    let result = await model.updateUser(id,body)
+    if (result) {
+      ctx.status = 201
+      ctx.body = result
+    } else {
+      ctx.status = 201
+      ctx.body = "{}"
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx,ex)
+
+  }
+}
+
+async function updateUserPwd(ctx) {
+
+  try {
+    let id = parseInt(ctx.params.id)
+    const body = ctx.request.body
+    body.password = util.getHash(body.password)
+    const permission = can.update(ctx.state.user,body)
+    if (!permission.granted) {
+      ctx.status = 403;
+    }
+    let result = await model.updateUser(id,body)
+    if (result) {
+      ctx.status = 201
+      ctx.body = result
+    } else {
+      ctx.status = 201
+      ctx.body = "{}"
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx,ex)
+
+  }
+}
+
+
+
+async function deleteArticle(ctx) {
+  // TODO delete an existing article
+}
+
 
 module.exports = router

@@ -43,6 +43,11 @@ module.exports = {
             "type": "string",
             
         },
+        "company": {
+            "description": "the company of user",
+            "type": "string",
+            
+        },
     },
     "required": ["username", "password", "email","role"]
 }
