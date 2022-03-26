@@ -1,7 +1,7 @@
 const {Validator,ValidationError} = require('jsonschema')
 //const ValidationError  = require('sequelize/types')
 
-const breeds = require('../schemas/breeds.schema.js')
+const breeds = require('../schemas/dog.schema.js')
 const user = require('../schemas/user.schema.js')
 const v = new Validator()
 
