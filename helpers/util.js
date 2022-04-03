@@ -1,6 +1,8 @@
 
 
 const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require('uuid');
+
 
 exports.getHash = (str) => {
     var salt = bcrypt.genSaltSync(10);
@@ -8,6 +10,9 @@ exports.getHash = (str) => {
     return hash;
 }
 
+exports.genUUID = () => {
+    return uuidv4()
+}
 
 exports.comparePwd = (pwd,hash) => {
     return bcrypt.compareSync(pwd,hash)

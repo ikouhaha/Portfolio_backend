@@ -19,7 +19,8 @@
     "redoc": "^2.0.0-rc.65",
     "request": "^2.88.2",
     "role-acl": "^4.5.4",
-    "sequelize": "^6.17.0"
+    "sequelize": "^6.17.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {},
   "scripts": {

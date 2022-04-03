@@ -15,6 +15,12 @@ exports.run_query = async (collection, query) => {
   return result
 }
 
+exports.run_one_query = async (collection, query) => {
+  const dbClient = await mongoClient.connect(CONNECTION_URI)
+  const result = await dbClient.db(DATABASE_NAME).collection(collection).findOne(query)
+  return result
+}
+
 exports.run_insert = async (collection, document) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const seq = await _getNextSequenceValue(dbClient, collection)

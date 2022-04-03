@@ -43,8 +43,8 @@ module.exports = {
             "type": "string",
             
         },
-        "company": {
-            "description": "the company of user",
+        "companyCode": {
+            "description": "the company register code",
             "type": "string",
             
         },

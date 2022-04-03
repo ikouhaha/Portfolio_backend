@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
+const companyModel = require('../models/company')
 const model = require('../models/users')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
@@ -54,6 +55,17 @@ async function createUser(ctx) {
     const body = ctx.request.body
     body.dateRegistered = new Date()
     body.password = util.getHash(body.password)
+
+    if(body.role=="staff"){
+      let company =  await companyModel.findByCode(body.companyCode)
+      if(!company){
+        throw new Error("can't found the company");
+      }else{
+        body.company = company;
+      }
+
+    }
+
     let result = await model.createUser(body)
     if (result) {
       ctx.status = 201
@@ -139,11 +151,6 @@ async function updateUserPwd(ctx) {
   }
 }
 
-
-
-async function deleteArticle(ctx) {
-  // TODO delete an existing article
-}
 
 
 module.exports = router

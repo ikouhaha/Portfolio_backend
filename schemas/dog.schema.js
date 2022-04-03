@@ -5,18 +5,22 @@ module.exports = {
     "description": "dog's information",
     "type": "object",
     "properties": {
-        "breed_id":{
+        "name":{
+            "description": "The name of dog",
+            "type": "string"
+        },
+        "about":{
+            "description": "The description of dog",
+            "type": "string"
+        },
+        "breedID":{
             "description": "The breed id of dog",
             "type": "integer"
         },
-        "user_id":{
-            "description": "The breed id of dog",
+        "userID":{
+            "description": "The dog information create by",
             "type": "integer"
         },
     },
-    
-
-
-    "minItems": 1,
-
+    "required": ["name", "about","breed_id"]
 }
