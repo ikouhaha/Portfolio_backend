@@ -1,16 +1,15 @@
-const passport = require('koa-passport')
-const basicAuth = require('../strategies/basic')
-
-passport.use(basicAuth)
+const Passport = require('../helpers/passport.js')
 
 let auth = async (ctx, next, havePublicUser) => {
-    if (havePublicUser && !ctx.header.authorization) {
+    if(ctx.isAuthenticated()){
+        await next()
+    }
+    else if (havePublicUser && !ctx.header.authorization) {
         ctx.state.user = {}
         ctx.state.user.role = "public"
         await next()
     } else {
-
-        await passport.authenticate(['basic'], { session: false })(ctx, next)
+        await Passport.authenticate(['basic'])(ctx, next)
     }
 
 

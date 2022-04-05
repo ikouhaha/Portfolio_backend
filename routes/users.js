@@ -8,12 +8,14 @@ const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
 const { validateUser } = require('../controllers/validation')
 
+router.post('/signin', auth, signin) //for public user register
+router.post('/signout', signout) //for public user register
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
-router.post('/', bodyParser(), auth,validateUser, createUser) //for public user register
-router.put('/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUser)
-router.del('/:id([0-9]{1,})',bodyParser(),auth, deleteUser)
-router.put('/p/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUserPwd)
+router.post('/', auth, validateUser, createUser) //for public user register
+router.put('/:id([0-9]{1,})', auth, validateUser, updateUser)
+router.del('/:id([0-9]{1,})', auth, deleteUser)
+router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
 
 async function getAll(ctx) {
   try {
@@ -27,7 +29,7 @@ async function getAll(ctx) {
       }
     }
   } catch (ex) {
-    util.createErrorResponse(ctx,ex)
+    util.createErrorResponse(ctx, ex)
 
   }
 }
@@ -45,7 +47,7 @@ async function getById(ctx) {
       }
     }
   } catch (ex) {
-    util.createErrorResponse(ctx,ex)
+    util.createErrorResponse(ctx, ex)
 
   }
 }
@@ -56,11 +58,11 @@ async function createUser(ctx) {
     body.dateRegistered = new Date()
     body.password = util.getHash(body.password)
 
-    if(body.role=="staff"){
-      let company =  await companyModel.findByCode(body.companyCode)
-      if(!company){
+    if (body.role == "staff") {
+      let company = await companyModel.findByCode(body.companyCode)
+      if (!company) {
         throw new Error("can't found the company");
-      }else{
+      } else {
         body.company = company;
       }
 
@@ -75,7 +77,7 @@ async function createUser(ctx) {
       ctx.body = "{}"
     }
   } catch (ex) {
-    util.createErrorResponse(ctx,ex)
+    util.createErrorResponse(ctx, ex)
 
   }
 
@@ -86,7 +88,7 @@ async function deleteUser(ctx) {
   try {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
-    const permission = can.delete(ctx.state.user,body)
+    const permission = can.delete(ctx.state.user, body)
     if (!permission.granted) {
       ctx.status = 403;
     }
@@ -99,7 +101,7 @@ async function deleteUser(ctx) {
       ctx.body = "{}"
     }
   } catch (ex) {
-    util.createErrorResponse(ctx,ex)
+    util.createErrorResponse(ctx, ex)
 
   }
 }
@@ -109,11 +111,11 @@ async function updateUser(ctx) {
   try {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
-    const permission = can.update(ctx.state.user,body)
+    const permission = can.update(ctx.state.user, body)
     if (!permission.granted) {
       ctx.status = 403;
     }
-    let result = await model.updateUser(id,body)
+    let result = await model.updateUser(id, body)
     if (result) {
       ctx.status = 201
       ctx.body = result
@@ -122,7 +124,7 @@ async function updateUser(ctx) {
       ctx.body = "{}"
     }
   } catch (ex) {
-    util.createErrorResponse(ctx,ex)
+    util.createErrorResponse(ctx, ex)
 
   }
 }
@@ -133,11 +135,11 @@ async function updateUserPwd(ctx) {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
     body.password = util.getHash(body.password)
-    const permission = can.update(ctx.state.user,body)
+    const permission = can.update(ctx.state.user, body)
     if (!permission.granted) {
       ctx.status = 403;
     }
-    let result = await model.updateUser(id,body)
+    let result = await model.updateUser(id, body)
     if (result) {
       ctx.status = 201
       ctx.body = result
@@ -146,11 +148,43 @@ async function updateUserPwd(ctx) {
       ctx.body = "{}"
     }
   } catch (ex) {
-    util.createErrorResponse(ctx,ex)
+    util.createErrorResponse(ctx, ex)
 
   }
 }
 
+
+async function signin(ctx) {
+  try {
+    if (ctx.isAuthenticated()) {
+      await ctx.login(ctx.state.user)
+      console.log("sign in successfully")
+      ctx.status = 200
+    } else {
+      ctx.status = 401
+    }
+
+  } catch (ex) {
+    util.createErrorResponse(ctx, ex)
+
+  }
+}
+
+async function signout(ctx) {
+  try {
+    if (ctx.isAuthenticated()) {
+      await ctx.logout()
+      console.log("sign out successfully")
+      ctx.status = 200
+
+    } else {
+      ctx.status = 401
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx, ex)
+
+  }
+}
 
 
 module.exports = router

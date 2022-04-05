@@ -9,7 +9,7 @@ const { validateCompany } = require('../controllers/validation')
 
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
-router.post('/', bodyParser(), validateCompany, createCompany) //for public user register
+router.post('/', validateCompany, createCompany) //for public user register
 
 
 async function getAll(ctx) {

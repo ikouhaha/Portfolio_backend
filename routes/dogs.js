@@ -12,9 +12,9 @@ const { validateDog } = require('../controllers/validation')
 
 router.get('/', (ctx, next) => auth(ctx, next, true), getAll) //for public user
 router.get('/:id([0-9]{1,})', (ctx, next) => auth(ctx, next, true), getById); // for public user
-router.post('/', bodyParser(), auth, validateDog, createDog)
-router.put('/:id([0-9]{1,})', bodyParser(), auth, validateDog, updateDog)
-router.del('/:id([0-9]{1,})', bodyParser(), auth, validateDog, deleteDog)
+router.post('/', auth, validateDog, createDog)
+router.put('/:id([0-9]{1,})', auth, validateDog, updateDog)
+router.del('/:id([0-9]{1,})', auth, validateDog, deleteDog)
 
 
 async function getAll(ctx, next) {
