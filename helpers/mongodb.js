@@ -6,7 +6,7 @@ const mongo_password = mongoAuth.config.password
 
 const CONNECTION_URI = `mongodb+srv://${mongo_username}:${mongo_password}@${mongoAuth.config.host}`
 const DATABASE_NAME = mongoAuth.config.database
-
+const util = require('../helpers/util')
 
 
 exports.run_query = async (collection, query) => {
@@ -29,16 +29,22 @@ exports.run_insert = async (collection, document) => {
   return { "status": 201, "description": "Data insert successfully" }
 }
 
-exports.run_update = async (collection,query, document) => {
+exports.run_update = async (collection, query, document) => {
+  let cloneDoc = util.clone(document);
+  if ('_id' in cloneDoc) {
+    delete cloneDoc._id;
+  }
+
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).updateOne(
     query,
-    { $set: document } 
+    { $set: cloneDoc }
   )
   return { "status": 201, "description": `${result.modifiedCount} Data update successfully` }
 }
 
 exports.run_delete = async (collection, query) => {
+
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).deleteOne(query)
   return { "status": 201, "description": `${result.deletedCount} data delete successfully` }

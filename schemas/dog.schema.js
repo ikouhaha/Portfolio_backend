@@ -30,5 +30,5 @@ module.exports = {
             "type": "string"
         },
     },
-    "required": ["name", "about","breed_id","imageBase64","createdBy","companyCode"]
+    "required": ["name", "about","breedID","imageBase64","createdBy","companyCode"]
 }

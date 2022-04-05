@@ -1,18 +1,31 @@
 const AccessControl = require('role-acl')
 const ac = new AccessControl()
 
+//read user
 ac.grant('user')
   .condition({ Fn:'EQUALS', args: {'requester':'$.owner'}})
   .execute('read')
   .on('user', ['*', '!password', '!passwordSalt'])
+  ac.grant('staff')
+  .condition({ Fn:'EQUALS', args: {'requester':'$.owner'}})
+  .execute('read')
+  .on('user', ['*', '!password', '!passwordSalt'])  
+  ac.grant('admin').execute('read').on('user')
+
+//read users
+ac.grant('admin').execute('read').on('users')
+
+//update user
 ac.grant('user')
   .condition({Fn:'EQUALS', args: {'requester':'$.owner'}})
   .execute('update')
   .on('user', ['firstName', 'lastName', 'about', 'password', 'email', 'avatarURL'])
-  
-ac.grant('admin').execute('read').on('user')
-ac.grant('admin').execute('read').on('users')
-ac.grant('admin').execute('update').on('user')
+  ac.grant('staff')
+  .condition({Fn:'EQUALS', args: {'requester':'$.owner'}})
+  .execute('update')
+  .on('user', ['firstName', 'lastName', 'about', 'password', 'email', 'avatarURL'])
+
+//delete user
 ac.grant('admin')
   .condition({Fn:'NOT_EQUALS', args:{'requester':'$.owner'}})
   .execute('delete')

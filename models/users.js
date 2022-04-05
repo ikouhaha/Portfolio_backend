@@ -14,7 +14,7 @@ exports.getAll = async function () {
 }
 
 exports.getById = async function (id) {
-  let data = await db.run_query(collection, {'id':id})
+  let data = await db.run_one_query(collection, {'id':id})
   return data
 }
 

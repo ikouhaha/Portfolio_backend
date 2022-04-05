@@ -1,6 +1,8 @@
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
 
+const userModel = require('../models/users')
+const breedModel = require('../models/breeds')
 const model = require('../models/dogs')
 const can = require('../permission/dog')
 const auth = require('../controllers/auth')
@@ -22,8 +24,14 @@ async function getAll(ctx, next) {
       for (result of results) {
         const canUpdate = can.update(ctx.state.user, result).granted
         const canDelete = can.delete(ctx.state.user, result).granted
+        const breed = await breedModel.getById(result.breedID)
+        const createBy = await userModel.getById(result.createdBy)
         result.canUpdate = canUpdate;
         result.canDelete = canDelete;
+
+        result.breed = breed
+        result.createBy = createBy
+        
       }
 
       ctx.body = results;
@@ -42,9 +50,14 @@ async function getById(ctx) {
     if (result) {
       const canUpdate = can.update(ctx.state.user, result).granted
       const canDelete = can.delete(ctx.state.user, result).granted
+      const breed = await breedModel.getById(result.breedID)
+      const createBy = await userModel.getById(result.createdBy)
       result.canUpdate = canUpdate;
       result.canDelete = canDelete;
       ctx.body = result;
+      result.breed = breed
+      result.createBy = createBy
+      
     }
 
   } catch (ex) {

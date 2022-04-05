@@ -14,6 +14,10 @@ exports.genUUID = () => {
     return uuidv4()
 }
 
+exports.clone = (obj)=>{
+    return JSON.parse(JSON.stringify(obj));
+}
+
 exports.comparePwd = (pwd,hash) => {
     return bcrypt.compareSync(pwd,hash)
 }
