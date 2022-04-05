@@ -10,7 +10,7 @@ const { validateUser } = require('../controllers/validation')
 
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
-router.post('/', bodyParser(), validateUser, createUser) //for public user register
+router.post('/', bodyParser(), auth,validateUser, createUser) //for public user register
 router.put('/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUser)
 router.del('/:id([0-9]{1,})',bodyParser(),auth, validateUser, deleteUser)
 router.put('/p/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUserPwd)

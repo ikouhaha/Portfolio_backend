@@ -13,14 +13,22 @@ module.exports = {
             "description": "The description of dog",
             "type": "string"
         },
+        "imageBase64":{
+            "description": "The base64 format of image",
+            "type": "string"
+        },
         "breedID":{
             "description": "The breed id of dog",
             "type": "integer"
         },
-        "userID":{
+        "createdBy":{
             "description": "The dog information create by",
             "type": "integer"
         },
+        "companyCode":{
+            "description": "The code of the company and the dog available at their company ",
+            "type": "string"
+        },
     },
-    "required": ["name", "about","breed_id"]
+    "required": ["name", "about","breed_id","imageBase64","createdBy","companyCode"]
 }
