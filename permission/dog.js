@@ -3,7 +3,7 @@ const ac = new AccessControl()
 
 
 //create dog
-ac.grant('staff').execute('create').on('dog')
+ac.grant('staff').condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } }).execute('create').on('dog')
 ac.grant('admin').execute('create').on('dog')
 
 //update dog
@@ -40,7 +40,7 @@ exports.read = (requester) => ac.can(requester.role).execute('read').sync().on('
 
 
 
-exports.create = (requester) => ac.can(requester.role).execute('create').sync().on('dog')
+exports.create = (requester,data) => ac.can(requester.role).context({ requester: requester.companyCode, owner: data.companyCode }).execute('create').sync().on('dog')
 
 
 exports.update = (requester, data) => ac.can(requester.role).context({ requester: requester.companyCode, owner: data.companyCode }).execute('update').sync().on('dog')

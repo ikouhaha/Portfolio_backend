@@ -12,7 +12,7 @@ router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
 router.post('/', bodyParser(), auth,validateUser, createUser) //for public user register
 router.put('/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUser)
-router.del('/:id([0-9]{1,})',bodyParser(),auth, validateUser, deleteUser)
+router.del('/:id([0-9]{1,})',bodyParser(),auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', bodyParser(),auth, validateUser, updateUserPwd)
 
 async function getAll(ctx) {

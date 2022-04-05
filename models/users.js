@@ -25,11 +25,11 @@ exports.createUser = async function (user) {
 }
 
 exports.updateUser = async function (id,user){
-  let status = await db.run_update(collection,id, user)
+  let status = await db.run_update(collection,{ 'id': parseInt(id) }, user)
   return status
 }
 
 exports.deleteUser = async function (id){
-  let status = await db.run_delete(collection, id)
+  let status = await db.run_delete(collection, { 'id': parseInt(id) })
   return status
 }

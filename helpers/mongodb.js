@@ -29,21 +29,19 @@ exports.run_insert = async (collection, document) => {
   return { "status": 201, "description": "Data insert successfully" }
 }
 
-exports.run_update = async (collection,id, document) => {
+exports.run_update = async (collection,query, document) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).updateOne(
-    { id: id },
+    query,
     { $set: document } 
   )
-  return { "status": 201, "description": "Data update successfully" }
+  return { "status": 201, "description": `${result.modifiedCount} Data update successfully` }
 }
 
-exports.run_delete = async (collection, id) => {
+exports.run_delete = async (collection, query) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
-  const result = await dbClient.db(DATABASE_NAME).collection(collection).deleteOne(
-    { id: id },
- )
-  return { "status": 201, "description": "Data delete successfully" }
+  const result = await dbClient.db(DATABASE_NAME).collection(collection).deleteOne(query)
+  return { "status": 201, "description": `${result.deletedCount} data delete successfully` }
 }
 
 exports.run_insert_many = async (collection, document) => {
