@@ -3,8 +3,13 @@ const db = require('../helpers/mongodb')
 
 const collection = "dogs"
 
-exports.getAll = async function (page, limite, order) {
+exports.getAll = async function (page, limit, order) {
   let data = await db.run_query(collection, {})
+  return data
+}
+
+exports.getAllByFilter = async function (filterData,page, limit, order={id:-1}) {
+  let data = await db.run_query(collection, filterData,order,(page-1)*limit,limit)
   return data
 }
 
@@ -28,3 +33,4 @@ exports.add = async function (document) {
   let status = await db.run_insert(collection, document)
   return status
 }
+

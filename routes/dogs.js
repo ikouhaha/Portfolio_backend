@@ -1,5 +1,5 @@
 const Router = require('koa-router')
-const bodyParser = require('koa-bodyparser')
+
 
 const userModel = require('../models/users')
 const breedModel = require('../models/breeds')
@@ -8,9 +8,9 @@ const can = require('../permission/dog')
 const auth = require('../controllers/auth')
 const router = Router({ prefix: '/api/v1/dogs' })
 const util = require('../helpers/util')
-const { validateDog } = require('../controllers/validation')
+const { validateDog,validateDogFilter } = require('../controllers/validation')
 
-router.get('/', (ctx, next) => auth(ctx, next, true), getAll) //for public user
+router.get('/', (ctx, next) => auth(ctx, next, true),validateDogFilter, getAll) //for public user
 router.get('/:id([0-9]{1,})', (ctx, next) => auth(ctx, next, true), getById); // for public user
 router.post('/', auth, validateDog, createDog)
 router.put('/:id([0-9]{1,})', auth, validateDog, updateDog)
@@ -19,19 +19,18 @@ router.del('/:id([0-9]{1,})', auth, validateDog, deleteDog)
 
 async function getAll(ctx, next) {
   try {
-    const results = await model.getAll()
+    const body = ctx.request.body
+    let filterData = {} ;
+    if(body.filterData){
+      filterData = util.filterPrepare(body.filterData)
+    }
+    const results = await model.getAllByFilter(filterData,body.page,body.limit,body.order)
     if (results.length) {
       for (result of results) {
         const canUpdate = can.update(ctx.state.user, result).granted
         const canDelete = can.delete(ctx.state.user, result).granted
-        const breed = await breedModel.getById(result.breedID)
-        const createBy = await userModel.getById(result.createdBy)
         result.canUpdate = canUpdate;
         result.canDelete = canDelete;
-
-        result.breed = breed
-        result.createBy = createBy
-        
       }
 
       ctx.body = results;
@@ -74,7 +73,10 @@ async function createDog(ctx) {
       ctx.status = 403;
       return;
     }
-
+    const breed = await breedModel.getById(body.breedID)
+    const createBy = await userModel.getById(body.createdBy)
+    body.breed = breed;
+    body.createUser = createBy;
     let result = await model.add(body)
     if (result) {
       ctx.status = 201
@@ -124,6 +126,12 @@ async function updateDog(ctx) {
       ctx.status = 403;
       return;
     }
+
+    const breed = await breedModel.getById(body.breedID)
+    const createBy = await userModel.getById(body.createdBy)
+    body.breed = breed;
+    body.createUser = createBy;
+    
     let result = await model.update(id, body)
     if (result) {
       ctx.status = 201
