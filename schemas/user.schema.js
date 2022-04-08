@@ -22,10 +22,6 @@ module.exports = {
             "description": "about the user",
             "type": "string"
         },
-        "dateRegistered": {
-            "description": "date of user register",
-            "type": "date-time"
-        },
         "password": {
             "description": "Create user password",
             "type": "string",

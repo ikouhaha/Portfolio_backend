@@ -24,7 +24,7 @@ module.exports = {
         },
         "dateRegistered": {
             "description": "date of company register",
-            "type": "date-time"
+            "type": "datetime"
         }
 
       

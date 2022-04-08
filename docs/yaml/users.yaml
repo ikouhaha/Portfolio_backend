@@ -1,22 +1,3 @@
-openapi: 3.0.0
-info:
-  version: 1.0.0
-  title: Back End Demonstration API
-  description: A simple blog API.
-  contact:
-    name: Dennis Au-Yeung
-    email: 217013622@stu.vtc.edu.hk
-  license:
-    name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
-servers:
-  - url: 'https://BScCOM-Blog-API-example.wongazta.repl.co'
-    description: Development server
-tags:
-  - name: Users
-    description: API endpoints for user management.
-  - name: Articles
-    description: Access and perform CRUD operations on blog entries.
 paths:
   /users:
     get:
