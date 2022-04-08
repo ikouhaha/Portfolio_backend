@@ -3,7 +3,7 @@ const bodyParser = require('koa-bodyparser')
 const model = require('../models/company')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
-const router = Router({ prefix: '/api/v1/company' })
+const router = Router({ prefix: '/api/v1/companies' })
 const util = require('../helpers/util')
 const { validateCompany } = require('../controllers/validation')
 

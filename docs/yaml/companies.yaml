@@ -1,11 +1,11 @@
 get:
   tags:
-    - Users
+    - Companies
   description:
-    Get all users.
+    Get all companies.
   responses:
     '200':
-      description: View of users 
+      description: View of companies 
     '403':
       description: no permission to view the users.
     '500':
