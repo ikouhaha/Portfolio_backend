@@ -1,0 +1,11 @@
+get:
+  tags:
+    - Breeds
+  description:
+    Get all breeds.
+  responses:
+    '200':
+      description: View of breeds 
+    '500':
+      description: server error
+

@@ -14,17 +14,27 @@ servers:
     description: Development server
 tags:
   - name: Companies
-    description: Company or organization
+    description: API endpoints for company management
   - name: Users
     description: API endpoints for user management.
-  - name: Articles
-    description: Access and perform CRUD operations on blog entries.
+  - name: Breeds
+    description: Access and view breeds of the dog
+  - name: Dogs
+    description: API endpoints for dog management.
 paths:
   /companies:
-    $ref: "./companyies.yaml"
+    $ref: "./companies.yaml"
   /companies/{id}:
     $ref: "./company.yaml"
   /users:
     $ref: "./users.yaml"
   /users/{id}:
     $ref: "./user.yaml"
+  /breeds:
+    $ref: "./breeds.yaml"
+  /breeds/{id}:
+    $ref: "./breed.yaml"
+  /dogs:
+    $ref: "./dogs.yaml"
+  /dogs/{id}:
+    $ref: "./dog.yaml"

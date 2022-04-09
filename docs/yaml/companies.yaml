@@ -6,22 +6,22 @@ get:
   responses:
     '200':
       description: View of companies 
-    '403':
-      description: no permission to view the users.
     '500':
       description: server error
 post:
   tags:
-    - Users
+    - Companies
   description:
-    Create a new user.
+    Create a new company.
   requestBody:
-    description: All new user data.
+    description: All new company data.
     required: true
     content:
       application/json:
         schema:
-          $ref: ./user.json#/definitions/user
+          $ref: ../json/company.json#/definitions/company
   responses:
     '201':
-      description: User created
+      description: Company created
+    '500':
+      description: server error

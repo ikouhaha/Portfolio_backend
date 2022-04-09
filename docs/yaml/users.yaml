@@ -21,7 +21,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: ./user.json#/definitions/user
+          $ref: ../json/user.json#/definitions/user
   responses:
     '201':
       description: User created

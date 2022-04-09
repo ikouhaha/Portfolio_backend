@@ -1,0 +1,20 @@
+
+parameters:
+  - in: path
+    name: id
+    schema:
+      type: integer
+    required: true
+    description: Numeric id of the breed
+get:
+  tags:
+    - Breeds
+  description:
+    Get breed by id.
+  responses:
+    '200':
+      description: View of breed 
+    '404':
+      description: Breed was not found in the DB. 
+    '500':
+      description: server error   

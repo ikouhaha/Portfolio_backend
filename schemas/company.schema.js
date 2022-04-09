@@ -21,12 +21,7 @@ module.exports = {
         "address":{
             "description": "The address of charity/company",
             "type": "string",
-        },
-        "dateRegistered": {
-            "description": "date of company register",
-            "type": "datetime"
         }
-
       
 
     },
