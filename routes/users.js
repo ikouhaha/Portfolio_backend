@@ -1,5 +1,5 @@
 const Router = require('koa-router')
-const bodyParser = require('koa-bodyparser')
+
 const companyModel = require('../models/company')
 const model = require('../models/users')
 const can = require('../permission/user')
@@ -8,8 +8,6 @@ const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
 const { validateUser } = require('../controllers/validation')
 
-router.post('/signin', auth, signin) //for public user register
-router.post('/signout', signout) //for public user register
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
 router.post('/', auth, validateUser, createUser) //for public user register
@@ -153,38 +151,6 @@ async function updateUserPwd(ctx) {
   }
 }
 
-
-async function signin(ctx) {
-  try {
-    if (ctx.isAuthenticated()) {
-      await ctx.login(ctx.state.user)
-      console.log("sign in successfully")
-      ctx.status = 200
-    } else {
-      ctx.status = 401
-    }
-
-  } catch (ex) {
-    util.createErrorResponse(ctx, ex)
-
-  }
-}
-
-async function signout(ctx) {
-  try {
-    if (ctx.isAuthenticated()) {
-      await ctx.logout()
-      console.log("sign out successfully")
-      ctx.status = 200
-
-    } else {
-      ctx.status = 401
-    }
-  } catch (ex) {
-    util.createErrorResponse(ctx, ex)
-
-  }
-}
 
 
 module.exports = router

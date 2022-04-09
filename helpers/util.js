@@ -22,16 +22,16 @@ exports.comparePwd = (pwd, hash) => {
     return bcrypt.compareSync(pwd, hash)
 }
 
-exports.createErrorResponse = (ctx, ex) => {
+exports.createErrorResponse = (ctx, ex,code = 500) => {
     if (ex.code == 11000) {
         let keys = Object.keys(ex.keyValue)
         let values = Object.values(ex.keyValue)
         keys = keys.join(',')
-        ctx.status = 500
-        ctx.body = { "status": 500, "description": `The following ${keys}:${values} has been registered` }
+        ctx.status = code
+        ctx.body = { "status": code, "description": `The following ${keys}:${values} has been registered` }
     } else {
-        ctx.status = 500
-        ctx.body = { "status": 500, "description": ex.message }
+        ctx.status = code
+        ctx.body = { "status": code, "description": ex.message }
     }
 }
 

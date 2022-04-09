@@ -26,24 +26,36 @@ module.exports = {
             "description": "Create user password",
             "type": "string",
             "minLength": 3,
-            
+
         },
         "email": {
             "description": "Create user email",
             "type": "string",
             "format": "email"
-            
+
         },
         "role": {
             "description": "the role of user",
             "type": "string",
-            
+
         },
         "companyCode": {
             "description": "the company register code",
             "type": "string",
-            
+
+        },
+
+    },
+    "if": {
+        "properties": {
+            "role": { "const": "staff" }
         },
     },
-    "required": ["username", "password", "email","role"]
+    "then": {
+        "required": ["companyCode", "username", "password", "email", "role"]
+    },
+    "else": {
+        "required": ["username", "password", "email", "role"]
+    }
+
 }

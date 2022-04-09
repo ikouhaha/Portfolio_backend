@@ -39,7 +39,7 @@
                     "type": "string"
                 },
                 "companyCode": {
-                    "description": "the company register code",
+                    "description": "the company register code , the field is required if role is staff ",
                     "type": "string"
                 }
             },

@@ -1,8 +1,11 @@
 const passport = require('koa-passport')
-const info = require('../config')
-const basicAuth = require('../strategies/basic')
 
-passport.use(basicAuth)
+const googleAuth = require('../strategies/google')
+
+
+
+passport.use(googleAuth)
+
 
 
 passport.serializeUser(function (user, done) {
