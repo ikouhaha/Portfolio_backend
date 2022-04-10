@@ -29,6 +29,13 @@
                     "type": "string",
                     "minLength": 3
                 },
+                "avatarUrl": {
+                    "description": "The avatar url of the user",
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^(https?|wss?|ftp)://"
+        
+                },
                 "email": {
                     "description": "Create user email",
                     "type": "string",

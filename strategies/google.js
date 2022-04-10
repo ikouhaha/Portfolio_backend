@@ -17,31 +17,27 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
         let result
         let user
 
-        result = await users.findByEmail(profile.email)
+        result = await users.findByEmail(profile._json.email)
 
         if (result) {
-           
             user = result
-            if (util.isEmpty(result.username)) {
-                user.needUpdateUser = true
-            }
 
         } else {
             console.log(`No user found with email ${email}`)
             //create user
             createUser = {}
-            createUser.email = profile.emails[0].value
-            createUser.username = profile.emails[0].value
-            createUser.firstName = profile.name.familyName
-            createUser.lastName = profile.name.givenName
-            createUser.avatarUrl = profile.picture
+            createUser.email = profile._json.email
+            createUser.username = profile._json.email
+            createUser.firstName = profile._json.family_name
+            createUser.lastName = profile._json.given_name
+            createUser.avatarUrl = profile._json.picture
+            createUser.role = "user"
+            createUser.needUpdateUser = true
             await users.createUser(createUser)
-            user = await users.findByEmail(profile.email)
+            user = await users.findByEmail(profile._json.email)
             if(!user){
                 return done(null, false);
             }
-            
-            user.needUpdateUser = true
         }
 
         
@@ -51,7 +47,7 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
     }
     catch (error) {
         console.error(`Error during authentication for user ${error}`)
-        return done(error)
+        return done(null, user);
     }
 
     
