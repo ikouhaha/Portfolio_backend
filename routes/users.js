@@ -86,7 +86,7 @@ async function deleteUser(ctx) {
   try {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
-    const permission = can.delete(ctx.state.user, {id:id})
+    const permission = can.delete(ctx.state.user, {"id":id})
     if (!permission.granted) {
       ctx.status = 403;
       return;
@@ -110,7 +110,7 @@ async function updateUser(ctx) {
   try {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
-    const permission = can.update(ctx.state.user, {id:id})
+    const permission = can.update(ctx.state.user, {"id":id})
     if (!permission.granted) {
       ctx.status = 403;
       return;
@@ -137,7 +137,7 @@ async function updateUserPwd(ctx) {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
     body.password = util.getHash(body.password)
-    const permission = can.update(ctx.state.user, {id:id})
+    const permission = can.update(ctx.state.user, {"id":id})
     if (!permission.granted) {
       ctx.status = 403;
     }
