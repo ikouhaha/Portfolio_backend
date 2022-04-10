@@ -23,6 +23,7 @@ const checkUserAndPass = async (username, password, done) => {
         const user = result[0]
         if (verifyPassword(user, password)) {
             console.log(`Successfully authenticated user ${username}`)
+            user.isBasicLogin = true
             return done(null, user)
         } else {
             console.log(`Password incorrect for user ${username}`)

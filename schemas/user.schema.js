@@ -34,6 +34,13 @@ module.exports = {
             "format": "email"
 
         },
+        "avatarUrl": {
+            "description": "The avatar url of the user",
+            "type": "string",
+            "format": "uri",
+            "pattern": "^(https?|wss?|ftp)://"
+
+        },
         "role": {
             "description": "the role of user",
             "type": "string",

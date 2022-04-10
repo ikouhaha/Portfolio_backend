@@ -8,6 +8,12 @@ exports.findByUsername = async function (username) {
   return data
 }
 
+exports.findByEmail = async function (email) {
+  let data = await db.run_one_query(collection, {'email': email})
+  return data
+}
+
+
 exports.getAll = async function () {
   let data = await db.run_query(collection, {})
   return data

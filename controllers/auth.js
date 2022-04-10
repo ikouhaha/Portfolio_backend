@@ -1,6 +1,7 @@
 
 const Passport = require('../helpers/passport.js')
 
+
 let auth = async (ctx, next, havePublicUser) => {
     if (ctx.isAuthenticated()) {
         await next()
@@ -9,10 +10,12 @@ let auth = async (ctx, next, havePublicUser) => {
         ctx.state.user = {}
         ctx.state.user.role = "public"
         await next()
-    } else if (ctx.header.authorization&&ctx.header.authorization.startsWith("Basic")) {
+    } else if(ctx.header.authorization&&ctx.header.authorization.startsWith("Basic"))  {
         await Passport.authenticate(['basic'])(ctx, next)
     } 
 
+    //no auth
+    //ctx.status = 401
 
     //next()
 }

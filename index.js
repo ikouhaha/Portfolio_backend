@@ -11,6 +11,14 @@ const session = require('koa-session')
 const passport = require('./helpers/passport')
 const passportGoogle = require('./helpers/passportGoogle')
 const static = require('koa-static-router')
+const cors = require('@koa/cors');
+
+
+const options = {
+origin: ['http://localhost'] 
+}
+app.use(cors(options));
+
 
 app.use(bodyParser())
 // Sessions
