@@ -33,7 +33,7 @@ exports.validateDogFilter = async(ctx,next) => {
         throwError:true,
         allowUnknownAttributes:false
     }
-    const body = ctx.request.body
+    const body = ctx.request.query
     try{
         v.validate(body,dogFilter,validationOptions)
         await next()

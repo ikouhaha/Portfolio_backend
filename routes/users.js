@@ -10,7 +10,7 @@ const { validateUser } = require('../controllers/validation')
 
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
-router.post('/', auth, validateUser, createUser) //for public user register
+router.post('/', validateUser, createUser) //for public user register
 router.put('/:id([0-9]{1,})', auth, validateUser, updateUser)
 router.del('/:id([0-9]{1,})', auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
@@ -68,6 +68,7 @@ async function createUser(ctx) {
 
     let result = await model.createUser(body)
     if (result) {
+      result.message = "create user successfully"
       ctx.status = 201
       ctx.body = result
     } else {
@@ -116,7 +117,7 @@ async function updateUser(ctx) {
       return;
     }
 
-    body.needUpdateUser = false
+    
     let result = await model.updateUser(id, body)
     if (result) {
       ctx.status = 201

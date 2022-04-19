@@ -45,6 +45,10 @@
                     "description": "the role of user",
                     "type": "string"
                 },
+                "googleId": {
+                    "description": "for the google register user",
+                    "type": "string"
+                },
                 "companyCode": {
                     "description": "the company register code , the field is required if role is staff ",
                     "type": "string"

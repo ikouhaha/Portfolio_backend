@@ -46,6 +46,10 @@ module.exports = {
             "type": "string",
 
         },
+        "googleId": {
+            "description": "for the google register user",
+            "type": "string"
+        },
         "companyCode": {
             "description": "the company register code",
             "type": "string",

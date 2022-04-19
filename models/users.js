@@ -13,6 +13,11 @@ exports.findByEmail = async function (email) {
   return data
 }
 
+exports.findByGoogleId = async function (id) {
+  let data = await db.run_one_query(collection, {'googleId': id})
+  return data
+}
+
 
 exports.getAll = async function () {
   let data = await db.run_query(collection, {})

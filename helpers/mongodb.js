@@ -37,7 +37,7 @@ exports.run_insert = async (collection, document) => {
   const seq = await _getNextSequenceValue(dbClient, collection)
   document.id = seq
   const result = await dbClient.db(DATABASE_NAME).collection(collection).insertOne(document)
-  return { "status": 201, "description": "Data insert successfully" }
+  return { "status": 201, "message": "Data insert successfully" }
 }
 
 exports.run_update = async (collection, query, document) => {
@@ -51,14 +51,14 @@ exports.run_update = async (collection, query, document) => {
     query,
     { $set: cloneDoc }
   )
-  return { "status": 201, "description": `${result.modifiedCount} Data update successfully` }
+  return { "status": 201, "message": `${result.modifiedCount} Data update successfully` }
 }
 
 exports.run_delete = async (collection, query) => {
 
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).deleteOne(query)
-  return { "status": 201, "description": `${result.deletedCount} data delete successfully` }
+  return { "status": 201, "message": `${result.deletedCount} data delete successfully` }
 }
 
 exports.run_insert_many = async (collection, document) => {
@@ -69,7 +69,7 @@ exports.run_insert_many = async (collection, document) => {
     document[index].id = seq
   }
   const result = await dbClient.db(DATABASE_NAME).collection(collection).insertMany(document)
-  return { "status": 201, "description": "Data insert successfully" }
+  return { "status": 201, "message": "Data insert successfully" }
 }
 
 exports.getNextSequenceValue = async (sequenceName) => {

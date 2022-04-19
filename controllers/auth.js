@@ -10,7 +10,7 @@ let auth = async (ctx, next, havePublicUser) => {
         ctx.state.user = {}
         ctx.state.user.role = "public"
         await next()
-    } else if(ctx.header.authorization&&ctx.header.authorization.startsWith("Basic"))  {
+    } else if(ctx.header.authorization&&ctx.header.authorization.startsWith("Basic"))  { //for postman only
         await Passport.authenticate(['basic'])(ctx, next)
     } 
 

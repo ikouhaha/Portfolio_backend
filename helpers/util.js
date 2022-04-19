@@ -31,9 +31,9 @@ exports.createResponse = (ctx,code = 200,msg = "",data) => {
 
     ctx.status = code
     if(data){
-        ctx.body = { "description":msg , data:data }
+        ctx.body = { "message":msg , data:data }
     }else{
-        ctx.body = { "description":msg, data:{}  }
+        ctx.body = { "message":msg, data:{}  }
     }
     
 
@@ -45,10 +45,10 @@ exports.createErrorResponse = (ctx, ex,code = 500) => {
         let values = Object.values(ex.keyValue)
         keys = keys.join(',')
         ctx.status = code
-        ctx.body = { "description": `The following ${keys}:${values} has been registered` }
+        ctx.body = { "message": `The following ${keys}:${values} has been registered` }
     } else {
         ctx.status = code
-        ctx.body = {  "description": ex.message }
+        ctx.body = {  "message": ex.message }
     }
 }
 

@@ -1,20 +1,25 @@
+
 get:
   tags:
     - Dogs
   description:
-    Get all dogs by filter.
-  requestBody:
-    description: Get all dogs by filter. staff can view edit action if the dog's company match with staff
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: ../json/dogFilter.json#/definitions/dog
+    Get all dogs by filter. staff can view edit action if the dog's company match with staff.
   responses:
     '200':
       description: View of dogs 
     '500':
       description: server error
+parameters:
+  - in: query
+    name: filter data
+    schema:
+        $ref: ../json/dogFilter.json#/definitions/dog
+    required: true
+    description: Numeric page of the dogs
+    content:
+      application/json:
+        schema:
+          $ref: ../json/dogFilter.json#/definitions/dog         
 post:
   tags:
     - Dogs

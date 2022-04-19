@@ -18,26 +18,24 @@
                     "minimum": 1
                 },
                 "order": {
-                    "description": "the sorting by specified field and sorting descending/ascending",
-                    "type": "object"
+                    "description": "the sorting by specified field ",
+                    "type": "string"
                 },
-                "filterData": {
-                    "description": "the filter field and data of the dogs",
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "description": "The name of dog ",
-                            "type": "string"
-                        },
-                        "companyCode": {
-                            "description": "The code of company ",
-                            "type": "string"
-                        },
-                        "breedID": {
-                            "description": "The id of dog's breed ",
-                            "type": "integer"
-                        }
-                    }
+                "sorting" :{
+                    "description":"desc = sorting descending, asc = ascending",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of dog ",
+                    "type": "string"
+                },
+                "companyCode": {
+                    "description": "The code of company ",
+                    "type": "string"
+                },
+                "breedID": {
+                    "description": "The id of dog's breed ",
+                    "type": "integer"
                 }
             },
             "required": [

@@ -9,28 +9,36 @@ const company = require('./routes/companies')
 const bodyParser = require('koa-bodyparser')
 const session = require('koa-session')
 const passport = require('./helpers/passport')
-const passportGoogle = require('./helpers/passportGoogle')
+
 const static = require('koa-static-router')
 const cors = require('@koa/cors');
 
 
 const options = {
-origin: ['http://localhost'] 
+    origin: ['http://localhost:3000']
 }
+
+app.use(async (ctx, next) => {
+    ctx.set('Access-Control-Allow-Origin', ctx.request.header.origin);
+    ctx.set('Access-Control-Allow-Credentials', true);
+    await next();
+})
+
 app.use(cors(options));
 
 
 app.use(bodyParser())
 // Sessions
-app.use(static({dir:'docs', router: '/doc/'}))
+app.use(static({ dir: 'docs', router: '/doc/' }))
 
 app.keys = ['secret']
-app.use(session({}, app))
+const conf = {
+    encode: json => JSON.stringify(json),
+    decode: str => JSON.parse(str)
+}
+app.use(session(conf, app))
 app.use(passport.initialize())
 app.use(passport.session())
-
-app.use(passportGoogle.initialize())
-app.use(passportGoogle.session())
 
 app.use(auth.routes())
 app.use(breeds.routes())

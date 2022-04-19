@@ -10,20 +10,35 @@ const router = Router({ prefix: '/api/v1/dogs' })
 const util = require('../helpers/util')
 const { validateDog,validateDogFilter } = require('../controllers/validation')
 
-router.get('/', (ctx, next) => auth(ctx, next, true),validateDogFilter, getAll) //for public user
+router.get('/', (ctx, next) => auth(ctx, next, true),filterConverter,validateDogFilter, getAll) //for public user
 router.get('/:id([0-9]{1,})', (ctx, next) => auth(ctx, next, true), getById); // for public user
 router.post('/', auth, validateDog, createDog)
 router.put('/:id([0-9]{1,})', auth, validateDog, updateDog)
 router.del('/:id([0-9]{1,})', auth, validateDog, deleteDog)
 
+async function filterConverter(ctx,next){
+  const tryConvert = (ctx,key) =>{
+    try{
+      if(ctx.request.query[key]){
+        ctx.request.query[key] = parseInt(ctx.request.query[key])
+      }
+    }catch(ex){
+      console.error(ex)
+    }
+  }
+  if(ctx&&ctx.request&&ctx.request.query){
+    tryConvert(ctx,'page')
+    tryConvert(ctx,'limit')
+    tryConvert(ctx,'breedID')
+  }
+  await next()
+}
 
 async function getAll(ctx, next) {
   try {
-    const body = ctx.request.body
-    let filterData = {} ;
-    if(body.filterData){
-      filterData = util.filterPrepare(body.filterData)
-    }
+    const body = ctx.request.query
+    const {page,limit,...data} = body
+    let filterData = util.filterPrepare(data)
     const results = await model.getAllByFilter(filterData,body.page,body.limit,body.order)
     if (results.length) {
       for (result of results) {
@@ -32,7 +47,7 @@ async function getAll(ctx, next) {
         result.canUpdate = canUpdate;
         result.canDelete = canDelete;
       }
-
+      
       ctx.body = results;
     }
 
