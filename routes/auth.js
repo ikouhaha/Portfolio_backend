@@ -2,25 +2,25 @@ const Router = require('koa-router')
 const router = Router({ prefix: '/api/v1/auth' })
 const util = require('../helpers/util')
 const passport = require('../helpers/passport.js')
+const config = require('../config').config;
 const userModel = require("../models/users")
 
+const jwt = require('jsonwebtoken');
+
+router.post('/',passport.authenticate(['basic'],{session:false}), signin)
 
 
-router.post('/', signin)
-
-
-router.get('/signout', signout)
-router.post('/google/token', googleSigninByToken)
+router.get('/signout',signout)
+router.post('/google/token',passport.authenticate(['google-token'],{session:false}), googleSigninByToken)
 
 //router.get('/google/callback', googleCallBack) 
 //basic login
 async function signin(ctx, next) {
   try {
-    await passport.authenticate(['basic'])(ctx, next)
     if (ctx.isAuthenticated()) {
-      await ctx.login(ctx.state.user)
-      const user = {...ctx.state.user,isLogin:true}
-      console.log("sign in successfully")
+      const token = await jwt.sign(ctx.state.user, config.secret, { expiresIn: config.tokenExpired });
+      const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
+      console.log("sign in successfully "+token)
       ctx.status = 200
       ctx.body = user
     } else {
@@ -36,12 +36,11 @@ async function signin(ctx, next) {
 async function googleSigninByToken(ctx, next) {
 
   try {
-    //await PassportGoogle.authenticate('google')(ctx, next)
-    await passport.authenticate('google-token')(ctx, next)
+    
     if (ctx.isAuthenticated()) {
-      
-      await ctx.login(ctx.state.user)
-      const user = {...ctx.state.user,isLogin:true}
+      const token = await jwt.sign(ctx.state.user, config.secret, { expiresIn: config.tokenExpired });
+      const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
+      console.log("google sign in successfully "+token)
       ctx.status = 200
       ctx.body = user
 
@@ -60,14 +59,9 @@ async function googleSigninByToken(ctx, next) {
 
 async function signout(ctx) {
   try {
-    if (ctx.isAuthenticated()) {
-      await ctx.logout()
-      ctx.session = null;
-      console.log("sign out successfully")
-      
-    } 
+    
     ctx.status = 200
-      ctx.body = "sign out successfully"
+    ctx.body = {isLogin:false,token: ''}
   } catch (ex) {
     util.createErrorResponse(ctx, ex)
 

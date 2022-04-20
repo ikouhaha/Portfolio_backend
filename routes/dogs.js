@@ -6,6 +6,7 @@ const breedModel = require('../models/breeds')
 const model = require('../models/dogs')
 const can = require('../permission/dog')
 const auth = require('../controllers/auth')
+const authWithPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/dogs' })
 const util = require('../helpers/util')
 const { validateDog, validateDogFilter } = require('../controllers/validation')
@@ -14,10 +15,11 @@ const { validateDog, validateDogFilter } = require('../controllers/validation')
 // for public user , so specifiy auth method , if user is not found in db
 // , they can read dogs but can't take any action
 // otherwise , auth will check the user is login or not
-router.get('/', filterConverter, validateDogFilter, getAll)
+router.get('/',authWithPublic, filterConverter, validateDogFilter, getAll)
+router.get('/:id([0-9]{1,})',authWithPublic, getById);
 
-router.get('/:id([0-9]{1,})', getById);
 router.post('/', auth, validateDog, createDog)
+
 router.put('/:id([0-9]{1,})', auth, validateDog, updateDog)
 router.del('/:id([0-9]{1,})', auth, validateDog, deleteDog)
 
@@ -55,7 +57,7 @@ async function getAll(ctx, next) {
           result.canDelete = canDelete;
         }
       }
-
+      
       ctx.body = results;
     }
 
@@ -118,8 +120,8 @@ async function createDog(ctx) {
     util.createErrorResponse(ctx, ex)
 
   }
-
 }
+
 
 async function deleteDog(ctx) {
 

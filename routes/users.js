@@ -1,9 +1,11 @@
 const Router = require('koa-router')
 
 const companyModel = require('../models/company')
+const dogModel = require('../models/dogs')
 const model = require('../models/users')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
+const authPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
 const { validateUser } = require('../controllers/validation')
@@ -15,16 +17,21 @@ router.put('/:id([0-9]{1,})', auth, validateUser, updateUser)
 router.del('/:id([0-9]{1,})', auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
 
+
+router.put('/favourite/:dogId([0-9]{1,})', authPublic, favouriteDog)
+router.put('/unfavourite/:dogId([0-9]{1,})', auth, unfavouriteDog)
+
+
 router.get('/profile', profile)
 
-async function profile(ctx,ext){
-  if (ctx.isAuthenticated()){
+async function profile(ctx, ext) {
+  if (ctx.isAuthenticated()) {
     ctx.status = 200
-    const user = {...ctx.state.user,isLogin:true}
+    const user = { ...ctx.state.user, isLogin: true }
     delete user.googleId
     delete user.password
     ctx.body = user
-  }else{
+  } else {
     ctx.status = 204
 
   }
@@ -105,7 +112,7 @@ async function deleteUser(ctx) {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
     //check the role permission
-    const permission = can.delete(ctx.state.user, {"id":id})
+    const permission = can.delete(ctx.state.user, { "id": id })
     if (!permission.granted) {
       ctx.status = 403;
       return;
@@ -130,14 +137,80 @@ async function updateUser(ctx) {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
     //check the role permission
-    const permission = can.update(ctx.state.user, {"id":id})
+    const permission = can.update(ctx.state.user, { "id": id })
     if (!permission.granted) {
       ctx.status = 403;
       return;
     }
 
-    
+
     let result = await model.updateUser(id, body)
+    if (result) {
+      ctx.status = 201
+      ctx.body = result
+    } else {
+      ctx.status = 201
+      ctx.body = "{}"
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx, ex)
+
+  }
+}
+
+async function favouriteDog(ctx) {
+
+  try {
+    let dogId = parseInt(ctx.params.dogId)
+
+    //check the dog is exists
+    let dogFind = await dogModel.getById(dogId)
+
+    if(!dogFind){
+      ctx.status = 404
+      ctx.body = "The dogs not found"
+      return;
+    }
+    //everyone can like the dog (data) , so no need check permission
+
+    let result = await model.updateUser(id, {
+      favourites: {
+        [dogId]: true
+      }
+    })
+    if (result) {
+      ctx.status = 201
+      ctx.body = result
+    } else {
+      ctx.status = 201
+      ctx.body = "{}"
+    }
+  } catch (ex) {
+    util.createErrorResponse(ctx, ex)
+
+  }
+}
+
+async function unfavouriteDog(ctx) {
+
+  try {
+    let dogId = parseInt(ctx.params.dogId)
+
+    //check the dog is exists
+    let dogFind = await dogModel.getById(dogId)
+
+    if(!dogFind){
+      ctx.status = 404
+      ctx.body = "The dogs not found"
+      return;
+    }
+    //everyone can like the dog (data) , so no need check permission
+
+    let result = await model.updateUser(id, {
+      favourites: {
+        [dogId]: false
+      }
+    })
     if (result) {
       ctx.status = 201
       ctx.body = result
@@ -158,7 +231,7 @@ async function updateUserPwd(ctx) {
     const body = ctx.request.body
     body.password = util.getHash(body.password)
     //check the role
-    const permission = can.update(ctx.state.user, {"id":id})
+    const permission = can.update(ctx.state.user, { "id": id })
     if (!permission.granted) {
       ctx.status = 403;
     }

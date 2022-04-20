@@ -18,14 +18,17 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
         let user
 
         result = await users.findByGoogleId(profile.id)
-        
-        if (!result) {
-            return done(new Error("Please register first")) 
-        } 
 
-        
+        if (!result) {
+            return done(new Error("Please register first"))
+        }
+
+
 
         user = result
+        //security
+        delete user.password
+        delete user.googleId
 
 
         return done(null, user);
@@ -35,7 +38,7 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
         return done(error);
     }
 
-    
+
 }
 
 const strategy = new GoogleTokenStrategy({

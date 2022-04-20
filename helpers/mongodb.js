@@ -21,7 +21,11 @@ exports.run_query = async (collection, query,order,skip,limit) => {
   if(limit){
     result.limit(limit)
   }
-  return result.toArray()
+  
+  let returnResult = await result.toArray()
+  await dbClient.close()
+  return returnResult
+ 
 }
 
 
@@ -29,7 +33,10 @@ exports.run_query = async (collection, query,order,skip,limit) => {
 exports.run_one_query = async (collection, query) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).findOne(query)
-  return result
+  
+  let returnResult = await result
+  await dbClient.close()
+  return returnResult
 }
 
 exports.run_insert = async (collection, document) => {
@@ -37,6 +44,7 @@ exports.run_insert = async (collection, document) => {
   const seq = await _getNextSequenceValue(dbClient, collection)
   document.id = seq
   const result = await dbClient.db(DATABASE_NAME).collection(collection).insertOne(document)
+  await dbClient.close()
   return { "status": 201, "message": "Data insert successfully" }
 }
 
@@ -51,6 +59,7 @@ exports.run_update = async (collection, query, document) => {
     query,
     { $set: cloneDoc }
   )
+  await dbClient.close()
   return { "status": 201, "message": `${result.modifiedCount} Data update successfully` }
 }
 
@@ -58,6 +67,7 @@ exports.run_delete = async (collection, query) => {
 
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).deleteOne(query)
+  await dbClient.close()
   return { "status": 201, "message": `${result.deletedCount} data delete successfully` }
 }
 
@@ -68,21 +78,13 @@ exports.run_insert_many = async (collection, document) => {
     const seq = await _getNextSequenceValue(dbClient, collection)
     document[index].id = seq
   }
-  const result = await dbClient.db(DATABASE_NAME).collection(collection).insertMany(document)
+  
+  await dbClient.close()
   return { "status": 201, "message": "Data insert successfully" }
 }
 
-exports.getNextSequenceValue = async (sequenceName) => {
-  const dbClient = await mongoClient.connect(CONNECTION_URI)
-  var sequenceDocument = await dbClient.db(DATABASE_NAME).collection("counters").findOneAndUpdate(
-    { _id: sequenceName },
-    { $inc: { sequence_value: 1 } },
-    { returnNewDocument: true, upsert: true }
 
-  );
-  return sequenceDocument.value.sequence_value;
-}
-
+//get next id from collection
 _getNextSequenceValue = async (dbClient, sequenceName) => {
   var sequenceDocument = await dbClient.db(DATABASE_NAME).collection("counters").findOneAndUpdate(
     { _id: sequenceName },
