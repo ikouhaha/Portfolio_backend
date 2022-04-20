@@ -14,15 +14,20 @@ const static = require('koa-static-router')
 const cors = require('@koa/cors');
 
 
-const options = {
-    origin: ['http://localhost:3000']
-}
-
 app.use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', ctx.request.header.origin);
     ctx.set('Access-Control-Allow-Credentials', true);
     await next();
 })
+
+
+const options = {
+    origin: ['http://localhost:3000'],
+    
+    
+
+}
+
 
 app.use(cors(options));
 
@@ -34,7 +39,9 @@ app.use(static({ dir: 'docs', router: '/doc/' }))
 app.keys = ['secret']
 const conf = {
     encode: json => JSON.stringify(json),
-    decode: str => JSON.parse(str)
+    decode: str => JSON.parse(str),
+    
+
 }
 app.use(session(conf, app))
 app.use(passport.initialize())

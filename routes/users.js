@@ -10,13 +10,29 @@ const { validateUser } = require('../controllers/validation')
 
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
-router.post('/', validateUser, createUser) //for public user register
+router.post('/', validateUser, createUser) //for public user register, so without auth
 router.put('/:id([0-9]{1,})', auth, validateUser, updateUser)
 router.del('/:id([0-9]{1,})', auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
 
+router.get('/profile', profile)
+
+async function profile(ctx,ext){
+  if (ctx.isAuthenticated()){
+    ctx.status = 200
+    const user = {...ctx.state.user,isLogin:true}
+    delete user.googleId
+    delete user.password
+    ctx.body = user
+  }else{
+    ctx.status = 204
+
+  }
+}
+
 async function getAll(ctx) {
   try {
+    ////check the role permission
     const permission = can.readAll(ctx.state.user)
     if (!permission.granted) {
       ctx.status = 403;
@@ -35,6 +51,7 @@ async function getAll(ctx) {
 async function getById(ctx) {
   try {
     let id = parseInt(ctx.params.id)
+    //check the role
     const permission = can.read(ctx.state.user, { "id": id })
     if (!permission.granted) {
       ctx.status = 403;
@@ -87,6 +104,7 @@ async function deleteUser(ctx) {
   try {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
+    //check the role permission
     const permission = can.delete(ctx.state.user, {"id":id})
     if (!permission.granted) {
       ctx.status = 403;
@@ -111,6 +129,7 @@ async function updateUser(ctx) {
   try {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
+    //check the role permission
     const permission = can.update(ctx.state.user, {"id":id})
     if (!permission.granted) {
       ctx.status = 403;
@@ -138,6 +157,7 @@ async function updateUserPwd(ctx) {
     let id = parseInt(ctx.params.id)
     const body = ctx.request.body
     body.password = util.getHash(body.password)
+    //check the role
     const permission = can.update(ctx.state.user, {"id":id})
     if (!permission.granted) {
       ctx.status = 403;

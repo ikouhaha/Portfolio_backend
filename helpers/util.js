@@ -52,6 +52,7 @@ exports.createErrorResponse = (ctx, ex,code = 500) => {
     }
 }
 
+//string to be like string
 exports.filterPrepare = (filterData) => {
     let rv = this.clone(filterData);
     Object.keys(rv).map((key, index) => {
@@ -61,6 +62,18 @@ exports.filterPrepare = (filterData) => {
     });
     return rv;
 }
+
+exports.filterPrepare = (filterData) => {
+    let rv = this.clone(filterData);
+    Object.keys(rv).map((key, index) => {
+        if(typeof(rv[key])=="string"){
+            rv[key] = new RegExp(".*"+ rv[key] +".*")
+        };
+    });
+    return rv;
+}
+
+
 
 
 //console.log(this.getHash("123"));
