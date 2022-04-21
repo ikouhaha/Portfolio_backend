@@ -20,7 +20,8 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
         result = await users.findByGoogleId(profile.id)
 
         if (!result) {
-            return done(new Error("Please register first"))
+            console.log("Please register first")
+            return done(null,false)
         }
 
 

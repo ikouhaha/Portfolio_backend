@@ -20,8 +20,8 @@ module.exports = {
       "type": "string"
     },
     "sorting": {
-      "description": "desc = sorting descending, asc = ascending",
-      "type": "string"
+      "description": "-1 = sorting descending, 1 = ascending",
+      "type": "integer"
     },
     "name": {
       "description": "The name of dog ",

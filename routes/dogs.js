@@ -15,8 +15,8 @@ const { validateDog, validateDogFilter } = require('../controllers/validation')
 // for public user , so specifiy auth method , if user is not found in db
 // , they can read dogs but can't take any action
 // otherwise , auth will check the user is login or not
-router.get('/',authWithPublic, filterConverter, validateDogFilter, getAll)
-router.get('/:id([0-9]{1,})',authWithPublic, getById);
+router.get('/', authWithPublic, filterConverter, validateDogFilter, getAll)
+router.get('/:id([0-9]{1,})', authWithPublic, getById);
 
 router.post('/', auth, validateDog, createDog)
 
@@ -37,6 +37,7 @@ async function filterConverter(ctx, next) {
     tryConvert(ctx, 'page')
     tryConvert(ctx, 'limit')
     tryConvert(ctx, 'breedID')
+    
   }
   await next()
 }
@@ -47,17 +48,20 @@ async function getAll(ctx, next) {
     const { page, limit, ...data } = body
     //string to be like string such as '% str %'
     let filterData = util.filterPrepare(data)
-    const results = await model.getAllByFilter(filterData, body.page, body.limit, body.order)
+    const results = await model.getAllByFilter(filterData,{page: body.page,limit: body.limit,order: body.order})
     if (results.length) {
-      if (ctx.isAuthenticated()) {
-        for (result of results) {
+
+      for (result of results) {
+        if (ctx.isAuthenticated()) {
           const canUpdate = can.update(ctx.state.user, result).granted
           const canDelete = can.delete(ctx.state.user, result).granted
           result.canUpdate = canUpdate;
           result.canDelete = canDelete;
+          result.isFavourite = ctx.state.user.favourites[result.id]
         }
+        
       }
-      
+
       ctx.body = results;
     }
 
@@ -78,7 +82,10 @@ async function getById(ctx) {
         const canDelete = can.delete(ctx.state.user, result).granted
         result.canUpdate = canUpdate;
         result.canDelete = canDelete;
+        result.isFavourite = ctx.state.user.favourites[id]
       }
+
+    
 
 
       const breed = await breedModel.getById(result.breedID)
@@ -160,10 +167,13 @@ async function updateDog(ctx) {
 
     const breed = await breedModel.getById(body.breedID)
     const createBy = await userModel.getById(body.createdBy)
-    body.breed = breed;
-    body.createUser = createBy;
+    requestBody =  {...body,breed,createBy}
 
-    let result = await model.update(id, body)
+
+    //don't need save this fields
+    delete requestBody.isFavourite
+
+    let result = await model.update(id, requestBody)
     if (result) {
       ctx.status = 201
       ctx.body = result

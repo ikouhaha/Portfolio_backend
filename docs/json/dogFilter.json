@@ -21,9 +21,9 @@
                     "description": "the sorting by specified field ",
                     "type": "string"
                 },
-                "sorting" :{
-                    "description":"desc = sorting descending, asc = ascending",
-                    "type": "string"
+                "sorting": {
+                    "description": "-1 = sorting descending, 1 = ascending",
+                    "type": "integer"
                 },
                 "name": {
                     "description": "The name of dog ",

@@ -55,6 +55,12 @@ module.exports = {
             "type": "string",
 
         },
+        "favourites": {
+            "description": "save favourite dogs",
+            "type": "object",
+
+        },
+
 
     },
     "if": {

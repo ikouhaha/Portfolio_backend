@@ -8,8 +8,15 @@ exports.getAll = async function (page, limit, order) {
   return data
 }
 
-exports.getAllByFilter = async function (filterData,page, limit, order={id:-1}) {
-  let data = await db.run_query(collection, filterData,order,(page-1)*limit,limit)
+exports.getAllByFilter = async function (query,{page, limit,order="id",sorting=-1}) {
+  let data = await db.run_query(collection,query, {
+    skip:(page-1)*limit,
+    sort:{
+      [order]:sorting
+    },
+    limit:limit,
+    
+  })
   return data
 }
 

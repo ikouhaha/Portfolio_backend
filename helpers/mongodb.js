@@ -9,19 +9,19 @@ const DATABASE_NAME = mongoAuth.config.database
 const util = require('../helpers/util')
 
 
-exports.run_query = async (collection, query,order,skip,limit) => {
+exports.run_query = async (collection, query={},options={projection:null,sort:null,skip:null,limit:null}) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
-  const result = await dbClient.db(DATABASE_NAME).collection(collection).find(query)
-  if(order){
-    result.sort(order)
-  }
-  if(skip){
-    result.skip(skip)
-  }
-  if(limit){
-    result.limit(limit)
-  }
-  
+  const result = await dbClient.db(DATABASE_NAME).collection(collection).find(query,options)
+  let returnResult = await result.toArray()
+  await dbClient.close()
+  return returnResult
+ 
+}
+
+exports.run_aggregate = async (collection,options=[{$sort:{}},{$group:{}}]) => {
+  const dbClient = await mongoClient.connect(CONNECTION_URI)
+  console.log(options)
+  const result = await dbClient.db(DATABASE_NAME).collection(collection).aggregate(options)
   let returnResult = await result.toArray()
   await dbClient.close()
   return returnResult

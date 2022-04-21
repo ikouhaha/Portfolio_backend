@@ -79,7 +79,7 @@ async function createUser(ctx) {
     const body = ctx.request.body
     body.dateRegistered = new Date()
     body.password = util.getHash(body.password)
-
+    body.favourites = {}
     if (body.role == "staff") {
       let company = await companyModel.findByCode(body.companyCode)
       if (!company) {
@@ -173,7 +173,7 @@ async function favouriteDog(ctx) {
     }
     //everyone can like the dog (data) , so no need check permission
 
-    let result = await model.updateUser(id, {
+    let result = await model.updateUser(ctx.state.user.id, {
       favourites: {
         [dogId]: true
       }
@@ -206,7 +206,7 @@ async function unfavouriteDog(ctx) {
     }
     //everyone can like the dog (data) , so no need check permission
 
-    let result = await model.updateUser(id, {
+    let result = await model.updateUser(ctx.state.user.id, {
       favourites: {
         [dogId]: false
       }
