@@ -10,6 +10,7 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
     // look up the user and check the email if the user exists
     // call done() with either an error or the user, depending on outcome
     try {
+        let ex
         if (!profile) {
             return done(null, false); //without profile
         }
@@ -20,8 +21,7 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
         result = await users.findByGoogleId(profile.id)
 
         if (!result) {
-            console.log("Please register first")
-            return done(null,false)
+            return done(null,{status:401,message:"No user found"})
         }
 
 
@@ -46,7 +46,7 @@ const strategy = new GoogleTokenStrategy({
     clientID: info.config.googleClientID,
     clientSecret: info.config.googleClientSecret,
     callbackURL: info.config.googleCallbackURL,
-
+    
 }, authUser
 )
 

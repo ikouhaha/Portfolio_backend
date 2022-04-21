@@ -20,7 +20,7 @@ exports.run_query = async (collection, query={},options={projection:null,sort:nu
 
 exports.run_aggregate = async (collection,options=[{$sort:{}},{$group:{}}]) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
-  console.log(options)
+  
   const result = await dbClient.db(DATABASE_NAME).collection(collection).aggregate(options)
   let returnResult = await result.toArray()
   await dbClient.close()

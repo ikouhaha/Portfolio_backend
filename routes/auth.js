@@ -18,6 +18,11 @@ router.post('/google/token',passport.authenticate(['google-token'],{session:fals
 async function signin(ctx, next) {
   try {
     if (ctx.isAuthenticated()) {
+      if(ctx.state.user.status){
+        ctx.status = ctx.state.user.status
+        ctx.message = ctx.state.user.message
+        return
+      }
       const token = await jwt.sign(ctx.state.user, config.secret, { expiresIn: config.tokenExpired });
       const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
       console.log("sign in successfully "+token)
@@ -38,6 +43,11 @@ async function googleSigninByToken(ctx, next) {
   try {
     
     if (ctx.isAuthenticated()) {
+      if(ctx.state.user.status){
+        ctx.status = ctx.state.user.status
+        ctx.message = ctx.state.user.message
+        return
+      }
       const token = await jwt.sign(ctx.state.user, config.secret, { expiresIn: config.tokenExpired });
       const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
       console.log("google sign in successfully "+token)

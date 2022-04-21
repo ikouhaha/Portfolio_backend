@@ -30,12 +30,16 @@ const checkUserAndPass = async (username, password, done) => {
             return done(null, user)
         } else {
             console.log(`Password incorrect for user ${username}`)
+            return done(null,{status:401,message:"Username or password incorrect"})
+            
         }
     } else {
         console.log(`No user found with username ${username}`)
+        
+        return done(null,{status:401,message:"No user found"})
     }   
 
-    return done(null, false) // username or password were incorrect
+    
 }
 
 const strategy = new BasicStrategy(checkUserAndPass)

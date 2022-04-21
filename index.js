@@ -15,7 +15,6 @@ const static = require('koa-static-router')
 const cors = require('@koa/cors');
 
 
-
 const options = {
     origin: ['http://localhost:3000'],
     
@@ -25,7 +24,6 @@ const options = {
 
 
 app.use(cors(options));
-
 
 
 // Sessions

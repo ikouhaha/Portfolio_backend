@@ -1,4 +1,7 @@
+
+
 const Router = require('koa-router')
+const { writeFileSync } = require("fs")
 
 
 const userModel = require('../models/users')
@@ -16,7 +19,9 @@ const { validateDog, validateDogFilter } = require('../controllers/validation')
 // , they can read dogs but can't take any action
 // otherwise , auth will check the user is login or not
 router.get('/', authWithPublic, filterConverter, validateDogFilter, getAll)
+
 router.get('/:id([0-9]{1,})', authWithPublic, getById);
+router.get('/image/:id([0-9]{1,})', getImageById);
 
 router.post('/', auth, validateDog, createDog)
 
@@ -37,7 +42,7 @@ async function filterConverter(ctx, next) {
     tryConvert(ctx, 'page')
     tryConvert(ctx, 'limit')
     tryConvert(ctx, 'breedID')
-    
+
   }
   await next()
 }
@@ -48,7 +53,7 @@ async function getAll(ctx, next) {
     const { page, limit, ...data } = body
     //string to be like string such as '% str %'
     let filterData = util.filterPrepare(data)
-    const results = await model.getAllByFilter(filterData,{page: body.page,limit: body.limit,order: body.order})
+    const results = await model.getAllByFilter(filterData, { page: body.page, limit: body.limit, order: body.order })
     if (results.length) {
 
       for (result of results) {
@@ -59,7 +64,7 @@ async function getAll(ctx, next) {
           result.canDelete = canDelete;
           result.isFavourite = ctx.state.user.favourites[result.id]
         }
-        
+
       }
 
       ctx.body = results;
@@ -68,6 +73,27 @@ async function getAll(ctx, next) {
   } catch (ex) {
     util.createErrorResponse(ctx, ex)
 
+  }
+}
+
+async function getImageById(ctx,next) {
+  try {
+    let id = parseInt(ctx.params.id)
+    const result = await model.getById(id)
+    if (result) {
+      const {type,image}  = util.getImgByBase64(result.imageBase64)
+      ctx.status = 200
+      ctx.type = type
+      ctx.body = image
+    }
+
+  } catch (ex) {
+    //somthing wrong , return blank image
+    let blankImgBase64 = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    const {type,image}  = util.getImgByBase64(blankImgBase64)
+      ctx.status = 200
+      ctx.type = type
+      ctx.body = image
   }
 }
 
@@ -85,7 +111,7 @@ async function getById(ctx) {
         result.isFavourite = ctx.state.user.favourites[id]
       }
 
-    
+
 
 
       const breed = await breedModel.getById(result.breedID)
@@ -167,7 +193,7 @@ async function updateDog(ctx) {
 
     const breed = await breedModel.getById(body.breedID)
     const createBy = await userModel.getById(body.createdBy)
-    requestBody =  {...body,breed,createBy}
+    requestBody = { ...body, breed, createBy }
 
 
     //don't need save this fields
