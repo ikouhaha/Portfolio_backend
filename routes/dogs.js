@@ -1,7 +1,7 @@
 
 
 const Router = require('koa-router')
-const { writeFileSync } = require("fs")
+
 
 
 const userModel = require('../models/users')
@@ -13,6 +13,7 @@ const authWithPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/dogs' })
 const util = require('../helpers/util')
 const { validateDog, validateDogFilter } = require('../controllers/validation')
+const config = require('../config').config
 
 //(ctx, next) => auth(ctx, next, true)
 // for public user , so specifiy auth method , if user is not found in db
@@ -77,23 +78,32 @@ async function getAll(ctx, next) {
 }
 
 async function getImageById(ctx,next) {
+  const defaultImg =  (ctx) =>{
+    //somthing wrong , return blank image
+    let blankImgBase64 = config.defaultEmptyImage
+    const {type,image}  = util.getImgByBase64(blankImgBase64)
+      ctx.status = 200
+      ctx.type = type
+      ctx.body = image
+  }
   try {
     let id = parseInt(ctx.params.id)
     const result = await model.getById(id)
     if (result) {
       const {type,image}  = util.getImgByBase64(result.imageBase64)
+      if(!type){
+        defaultImg(ctx)
+        return
+      }
       ctx.status = 200
       ctx.type = type
       ctx.body = image
+    }else{
+      defaultImg(ctx)
     }
 
   } catch (ex) {
-    //somthing wrong , return blank image
-    let blankImgBase64 = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-    const {type,image}  = util.getImgByBase64(blankImgBase64)
-      ctx.status = 200
-      ctx.type = type
-      ctx.body = image
+    defaultImg(ctx)
   }
 }
 
