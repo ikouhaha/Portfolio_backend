@@ -39,5 +39,5 @@ app.use(company.routes())
 
 let port = process.env.PORT || 10888
 
-
+console.log(port)
 app.listen(port)

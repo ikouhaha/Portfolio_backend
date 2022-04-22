@@ -48,6 +48,8 @@ async function filterConverter(ctx, next) {
   await next()
 }
 
+
+
 async function getAll(ctx, next) {
   try {
     const body = ctx.request.query
@@ -55,20 +57,33 @@ async function getAll(ctx, next) {
     //string to be like string such as '% str %'
     let filterData = util.filterPrepare(data)
     const results = await model.getAllByFilter(filterData, { page: body.page, limit: body.limit, order: body.order })
+    const totalCount = await model.getAllCount(filterData)
+    let canCreate = ctx.state.user.role === "staff"
     if (results.length) {
 
       for (result of results) {
         if (ctx.isAuthenticated()) {
           const canUpdate = can.update(ctx.state.user, result).granted
           const canDelete = can.delete(ctx.state.user, result).granted
+         
           result.canUpdate = canUpdate;
           result.canDelete = canDelete;
           result.isFavourite = ctx.state.user.favourites[result.id]
         }
 
       }
-
-      ctx.body = results;
+      ctx.body = {}
+      ctx.body.canCreate = canCreate
+      ctx.body.totalCount = totalCount
+      ctx.body.list = results
+      
+    }else{
+      //return empty
+      ctx.status = 200
+      ctx.body = {}
+      ctx.body.canCreate = canCreate
+      ctx.body.totalCount = 0
+      ctx.body.list = []
     }
 
   } catch (ex) {
@@ -77,28 +92,28 @@ async function getAll(ctx, next) {
   }
 }
 
-async function getImageById(ctx,next) {
-  const defaultImg =  (ctx) =>{
+async function getImageById(ctx, next) {
+  const defaultImg = (ctx) => {
     //somthing wrong , return blank image
     let blankImgBase64 = config.defaultEmptyImage
-    const {type,image}  = util.getImgByBase64(blankImgBase64)
-      ctx.status = 200
-      ctx.type = type
-      ctx.body = image
+    const { type, image } = util.getImgByBase64(blankImgBase64)
+    ctx.status = 200
+    ctx.type = type
+    ctx.body = image
   }
   try {
     let id = parseInt(ctx.params.id)
     const result = await model.getById(id)
     if (result) {
-      const {type,image}  = util.getImgByBase64(result.imageBase64)
-      if(!type){
+      const { type, image } = util.getImgByBase64(result.imageBase64)
+      if (!type) {
         defaultImg(ctx)
         return
       }
       ctx.status = 200
       ctx.type = type
       ctx.body = image
-    }else{
+    } else {
       defaultImg(ctx)
     }
 
@@ -151,6 +166,7 @@ async function createDog(ctx) {
     const createBy = await userModel.getById(body.createdBy)
     body.breed = breed;
     body.createUser = createBy;
+    delete body.isFavourite //not need to save this field, read it after loading
     let result = await model.add(body)
     if (result) {
       ctx.status = 201

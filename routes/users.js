@@ -18,7 +18,7 @@ router.del('/:id([0-9]{1,})', auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
 
 
-router.put('/favourite/:dogId([0-9]{1,})', authPublic, favouriteDog)
+router.put('/favourite/:dogId([0-9]{1,})', auth, favouriteDog)
 router.put('/unfavourite/:dogId([0-9]{1,})', auth, unfavouriteDog)
 
 
@@ -172,11 +172,9 @@ async function favouriteDog(ctx) {
       return;
     }
     //everyone can like the dog (data) , so no need check permission
-
+    let favourites = {...ctx.state.user.favourites,[dogId]:true}
     let result = await model.updateUser(ctx.state.user.id, {
-      favourites: {
-        [dogId]: true
-      }
+      favourites: {...favourites}
     })
     if (result) {
       ctx.status = 201
@@ -205,11 +203,9 @@ async function unfavouriteDog(ctx) {
       return;
     }
     //everyone can like the dog (data) , so no need check permission
-
+    let favourites = {...ctx.state.user.favourites,[dogId]:false}
     let result = await model.updateUser(ctx.state.user.id, {
-      favourites: {
-        [dogId]: false
-      }
+      favourites: {...favourites}
     })
     if (result) {
       ctx.status = 201

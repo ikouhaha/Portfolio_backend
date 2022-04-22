@@ -18,6 +18,15 @@ exports.run_query = async (collection, query={},options={projection:null,sort:nu
  
 }
 
+exports.run_count = async (collection, query={}) => {
+  const dbClient = await mongoClient.connect(CONNECTION_URI)
+  const result = await dbClient.db(DATABASE_NAME).collection(collection).count(query)
+  let returnResult =  result
+  await dbClient.close()
+  return returnResult
+ 
+}
+
 exports.run_aggregate = async (collection,options=[{$sort:{}},{$group:{}}]) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
   

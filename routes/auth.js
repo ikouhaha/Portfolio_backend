@@ -13,8 +13,6 @@ router.post('/',passport.authenticate(['basic'],{session:false}), signin)
 router.get('/signout',signout)
 router.post('/google/token',passport.authenticate(['google-token'],{session:false}), googleSigninByToken)
 
-//router.get('/google/callback', googleCallBack) 
-//basic login
 async function signin(ctx, next) {
   try {
     if (ctx.isAuthenticated()) {
