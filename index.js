@@ -1,4 +1,5 @@
 const Koa = require('koa')
+require('dotenv').config()
 const app = new Koa()
 
 const auth = require('./routes/auth.js')
@@ -13,6 +14,7 @@ const bodyParser = require('koa-bodyparser')
 
 const static = require('koa-static-router')
 const cors = require('@koa/cors');
+
 
 
 const options = {
@@ -39,5 +41,5 @@ app.use(company.routes())
 
 let port = process.env.PORT || 10888
 
-console.log(port)
+console.log('test change')
 app.listen(port)

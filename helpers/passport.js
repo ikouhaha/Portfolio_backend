@@ -1,5 +1,5 @@
 const passport = require('koa-passport')
-const info = require('../config')
+
 const basicAuth = require('../strategies/basic')
 const googleAuth = require('../strategies/google')
 const jwtAuth = require('../strategies/jwt')

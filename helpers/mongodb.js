@@ -1,11 +1,10 @@
 const mongoClient = require("mongodb").MongoClient
-const mongoAuth = require('../config')
 
-const mongo_username = mongoAuth.config.user
-const mongo_password = mongoAuth.config.password
+const mongo_username = process.env.DB_USER
+const mongo_password = process.env.DB_PWD
 
-const CONNECTION_URI = `mongodb+srv://${mongo_username}:${mongo_password}@${mongoAuth.config.host}`
-const DATABASE_NAME = mongoAuth.config.database
+const CONNECTION_URI = `mongodb+srv://${mongo_username}:${mongo_password}@${process.env.DB_HOST}`
+const DATABASE_NAME = process.env.DB_NAME
 const util = require('../helpers/util')
 
 

@@ -1,3 +1,4 @@
 config.js
 t.js
 node_modules
+*.env
