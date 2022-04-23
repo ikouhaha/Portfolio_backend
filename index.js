@@ -44,9 +44,13 @@ app.use(company.routes())
 
 
 let port = process.env.PORT || 10888
-
+let host = process.env.HOST 
 
 console.log(port)
 console.log('watch4')
 
-app.listen(port)
+if(host){
+    app.listen(port,host)
+}else{
+    app.listen(port)
+}

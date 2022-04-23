@@ -1,17 +1,25 @@
 FROM node:14-alpine as debug
 
+WORKDIR /app
 
-LABEL version="1.0"
-LABEL description="This is the base docker image for the portfolio web backend API."
-LABEL maintainer = ["217013622@stu.vtc.edu.hk"]
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
+RUN npm install -g nodemon
+# Bundle app source
+COPY . .
+
+ENTRYPOINT [ "nodemon", "--inspect=0.0.0.0","./index.js" ]
+
+FROM node:14-alpine as prod
 
 WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
-RUN ls
 RUN npm install
 # Bundle app source
 COPY . ./app
 
 CMD [ "npm", "start" ]
+

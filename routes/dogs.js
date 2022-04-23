@@ -27,7 +27,7 @@ router.get('/image/:id([0-9]{1,})', getImageById);
 router.post('/', auth, validateDog, createDog)
 
 router.put('/:id([0-9]{1,})', auth, validateDog, updateDog)
-router.del('/:id([0-9]{1,})', auth, validateDog, deleteDog)
+router.del('/:id([0-9]{1,})', auth, deleteDog)
 
 async function filterConverter(ctx, next) {
   const tryConvert = (ctx, key) => {
@@ -61,7 +61,7 @@ async function getAll(ctx, next) {
     const totalCount = await model.getAllCount(filterData)
     
     let canCreate = false;
-    console.log(ctx.state.user)
+    
     if(ctx.state.user){
       canCreate = ctx.state.user.role === "staff"
     }
