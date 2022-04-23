@@ -1,5 +1,9 @@
 const Koa = require('koa')
+
+
 require('dotenv').config()
+
+
 const app = new Koa()
 
 const auth = require('./routes/auth.js')
@@ -18,9 +22,9 @@ const cors = require('@koa/cors');
 
 
 const options = {
-    origin: ['http://localhost:3000'],
-    
-    
+    origin: process.env.COR_ORIGINS ? process.env.COR_ORIGINS.split(',') : ['http://localhost:3000']
+
+
 
 }
 
@@ -41,5 +45,8 @@ app.use(company.routes())
 
 let port = process.env.PORT || 10888
 
-console.log('test change')
+
+console.log(port)
+console.log('watch4')
+
 app.listen(port)

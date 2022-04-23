@@ -53,12 +53,20 @@ async function filterConverter(ctx, next) {
 async function getAll(ctx, next) {
   try {
     const body = ctx.request.query
+    
     const { page, limit, ...data } = body
     //string to be like string such as '% str %'
     let filterData = util.filterPrepare(data)
     const results = await model.getAllByFilter(filterData, { page: body.page, limit: body.limit, order: body.order })
     const totalCount = await model.getAllCount(filterData)
-    let canCreate = ctx.state.user.role === "staff"
+    
+    let canCreate = false;
+    console.log(ctx.state.user)
+    if(ctx.state.user){
+      canCreate = ctx.state.user.role === "staff"
+    }
+     
+    
     if (results.length) {
 
       for (result of results) {
@@ -220,7 +228,6 @@ async function updateDog(ctx) {
     const breed = await breedModel.getById(body.breedID)
     const createBy = await userModel.getById(body.createdBy)
     requestBody = { ...body, breed, createBy }
-
 
     //don't need save this fields
     delete requestBody.isFavourite

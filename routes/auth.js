@@ -15,6 +15,7 @@ router.post('/google/token',passport.authenticate(['google-token'],{session:fals
 
 async function signin(ctx, next) {
   try {
+    console.log(process.env.TOKEN_EXPIRED )
     if (ctx.isAuthenticated()) {
       if(ctx.state.user.status){
         ctx.status = ctx.state.user.status
@@ -39,7 +40,7 @@ async function signin(ctx, next) {
 async function googleSigninByToken(ctx, next) {
 
   try {
-    
+    console.log(process.env.TOKEN_EXPIRED )
     if (ctx.isAuthenticated()) {
       if(ctx.state.user.status){
         ctx.status = ctx.state.user.status
