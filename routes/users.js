@@ -1,11 +1,9 @@
 const Router = require('koa-router')
 
 const companyModel = require('../models/company')
-const dogModel = require('../models/dogs')
 const model = require('../models/users')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
-const authPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
 const { validateUser } = require('../controllers/validation')
@@ -18,8 +16,6 @@ router.del('/:id([0-9]{1,})', auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
 
 
-router.put('/favourite/:dogId([0-9]{1,})', auth, favouriteDog)
-router.put('/unfavourite/:dogId([0-9]{1,})', auth, unfavouriteDog)
 
 
 router.get('/profile', profile)
@@ -158,67 +154,7 @@ async function updateUser(ctx) {
   }
 }
 
-async function favouriteDog(ctx) {
 
-  try {
-    let dogId = parseInt(ctx.params.dogId)
-
-    //check the dog is exists
-    let dogFind = await dogModel.getById(dogId)
-
-    if(!dogFind){
-      ctx.status = 404
-      ctx.body = "The dogs not found"
-      return;
-    }
-    //everyone can like the dog (data) , so no need check permission
-    let favourites = {...ctx.state.user.favourites,[dogId]:true}
-    let result = await model.updateUser(ctx.state.user.id, {
-      favourites: {...favourites}
-    })
-    if (result) {
-      ctx.status = 201
-      ctx.body = result
-    } else {
-      ctx.status = 201
-      ctx.body = "{}"
-    }
-  } catch (ex) {
-    util.createErrorResponse(ctx, ex)
-
-  }
-}
-
-async function unfavouriteDog(ctx) {
-
-  try {
-    let dogId = parseInt(ctx.params.dogId)
-
-    //check the dog is exists
-    let dogFind = await dogModel.getById(dogId)
-
-    if(!dogFind){
-      ctx.status = 404
-      ctx.body = "The dogs not found"
-      return;
-    }
-    //everyone can like the dog (data) , so no need check permission
-    let favourites = {...ctx.state.user.favourites,[dogId]:false}
-    let result = await model.updateUser(ctx.state.user.id, {
-      favourites: {...favourites}
-    })
-    if (result) {
-      ctx.status = 201
-      ctx.body = result
-    } else {
-      ctx.status = 201
-      ctx.body = "{}"
-    }
-  } catch (ex) {
-    util.createErrorResponse(ctx, ex)
-
-  }
-}
 
 async function updateUserPwd(ctx) {
 

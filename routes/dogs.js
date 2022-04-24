@@ -23,11 +23,10 @@ router.get('/', authWithPublic, filterConverter, validateDogFilter, getAll)
 
 router.get('/:id([0-9]{1,})', authWithPublic, getById);
 router.get('/image/:id([0-9]{1,})', getImageById);
-
 router.post('/', auth, validateDog, createDog)
 
 router.put('/:id([0-9]{1,})', auth, validateDog, updateDog)
-router.del('/:id([0-9]{1,})', auth, deleteDog)
+router.del('/:id([0-9]{1,})/:companyCode', auth, deleteDog)
 
 async function filterConverter(ctx, next) {
   const tryConvert = (ctx, key) => {
@@ -84,6 +83,7 @@ async function getAll(ctx, next) {
       ctx.body.canCreate = canCreate
       ctx.body.totalCount = totalCount
       ctx.body.list = results
+      ctx.body.favourites = ctx.state.user.favourites||{}
       
     }else{
       //return empty
@@ -92,6 +92,7 @@ async function getAll(ctx, next) {
       ctx.body.canCreate = canCreate
       ctx.body.totalCount = 0
       ctx.body.list = []
+      ctx.body.favourites = {}
     }
 
   } catch (ex) {
@@ -153,6 +154,7 @@ async function getById(ctx) {
       ctx.body = result;
       result.breed = breed
       result.createBy = createBy
+      
 
     }
 
@@ -193,9 +195,9 @@ async function createDog(ctx) {
 async function deleteDog(ctx) {
 
   try {
-    let id = ctx.params.id
-    const body = ctx.request.body
-    const permission = can.delete(ctx.state.user, body)
+    let id = parseInt(ctx.params.id)
+    const companyCode = ctx.params.companyCode
+    const permission = can.delete(ctx.state.user, {companyCode:companyCode})
     if (!permission.granted) {
       ctx.status = 403;
       return;

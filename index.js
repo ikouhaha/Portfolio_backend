@@ -11,6 +11,7 @@ const breeds = require('./routes/breeds.js')
 const dogs = require('./routes/dogs.js')
 const user = require('./routes/users')
 const company = require('./routes/companies')
+const favourites = require('./routes/favourites')
 const passport = require('./helpers/passport')
 
 
@@ -41,16 +42,21 @@ app.use(breeds.routes())
 app.use(dogs.routes())
 app.use(user.routes())
 app.use(company.routes())
+app.use(favourites.routes())
 
 
-let port = process.env.PORT || 10888
-let host = process.env.HOST 
+const port = process.env.PORT || 10888
+const host = process.env.HOST 
 
-console.log(port)
-console.log('watch4')
+console.log('host',host)
+console.log('port',port)
+console.log('watch7')
+
 
 if(host){
     app.listen(port,host)
 }else{
     app.listen(port)
 }
+
+
