@@ -82,7 +82,10 @@ async function getFavourites(ctx, next) {
       ctx.body.canCreate = canCreate
       ctx.body.totalCount = totalCount
       ctx.body.list = results
-      ctx.body.favourites = ctx.state.user.favourites || {}
+      
+      ctx.body.favourites = ctx.isAuthenticated()?ctx.state.user.favourites:{}
+      
+      
     }else{
       //return empty
       ctx.status = 200
