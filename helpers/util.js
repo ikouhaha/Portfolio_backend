@@ -1,6 +1,7 @@
 
 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -78,7 +79,22 @@ exports.getImgByBase64 = (str64) => {
     const [, type] = str64.split(';')[0].split(':')
     var base64Data = str64.replace(/^data:image\/(png|jpeg|jpg|gif);base64,/, '')
     const image = Buffer.from(base64Data, "base64")
-    return {type,image}
+    return { type, image }
+}
+
+
+exports.JWTverify = (token, secret = process.env.SECRET) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, secret, (err, decoded) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(decoded)
+            }
+        })
+
+    })
+
 }
 
 
