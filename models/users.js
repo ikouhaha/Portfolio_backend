@@ -8,6 +8,11 @@ exports.findByUsername = async function (username) {
   return data
 }
 
+exports.getUserById = async function (id){
+  let data = await db.run_query(collection, {'id': parseInt(id)})
+  return data
+}
+
 exports.findByEmail = async function (email) {
   let data = await db.run_one_query(collection, {'email': email})
   return data

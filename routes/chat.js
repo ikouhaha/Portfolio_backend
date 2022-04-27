@@ -117,7 +117,7 @@ module.exports = function Chat(io) {
         socket.on('clientDisconnect', async ({ roomId }) => {
             // io.to(roomId).emit('getRoom', 1);
             
-            let user = await model.getStaffByRoomId(roomId)
+            let user = await model.getUserByRoomId(roomId)
             if(user){
                 let msg = user.firstName + ' just left the chat'
                 io.to(roomId).emit('exitClientUser', msg);
@@ -130,7 +130,7 @@ module.exports = function Chat(io) {
 
         socket.on('staffDisconnect', async ({ roomId }) => {
             // io.to(roomId).emit('getRoom', 1);
-            let user = await model.getUserByRoomId(roomId)
+            let user = await model.getStaffByRoomId(roomId)
             if(user){
                 let msg = user.firstName + ' just left the chat'
                 io.to(roomId).emit('exitStaffUser', msg);

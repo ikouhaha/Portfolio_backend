@@ -6,6 +6,7 @@ const Router = require('koa-router')
 
 const userModel = require('../models/users')
 const breedModel = require('../models/breeds')
+const commentModel = require('../models/comments')
 const model = require('../models/dogs')
 const can = require('../permission/dog')
 const auth = require('../controllers/auth')
@@ -76,9 +77,13 @@ async function getAll(ctx, next) {
           result.canUpdate = canUpdate;
           result.canDelete = canDelete;
           result.isFavourite = ctx.state.user.favourites[result.id]
+          
         }
 
       }
+      
+      
+
       ctx.body = {}
       ctx.body.canCreate = canCreate
       ctx.body.totalCount = totalCount
@@ -144,11 +149,15 @@ async function getById(ctx) {
         result.canUpdate = canUpdate;
         result.canDelete = canDelete;
         result.isFavourite = ctx.state.user.favourites[id]
+        
       }
 
 
 
-
+      result.comments = await commentModel.getByDogId(id)
+      for(let comment of result.comments){
+        comment.user = await userModel.getById(comment.userId)
+      }
       const breed = await breedModel.getById(result.breedID)
       const createBy = await userModel.getById(result.createdBy)
 
@@ -176,8 +185,14 @@ async function createDog(ctx) {
     const breed = await breedModel.getById(body.breedID)
     const createBy = await userModel.getById(body.createdBy)
     body.breed = breed;
-    body.createUser = createBy;
-    delete body.isFavourite //not need to save this field, read it after loading
+    body.createBy = createBy;
+    
+    //not need to save this field, read it after loading
+    delete body.isFavourite
+    delete body.comments
+    delete body.breed
+    delete body.createBy
+
     let result = await model.add(body)
     if (result) {
       ctx.status = 201
@@ -234,6 +249,9 @@ async function updateDog(ctx) {
 
     //don't need save this fields
     delete requestBody.isFavourite
+    delete requestBody.comments
+    delete requestBody.breed
+    delete requestBody.createBy
 
     let result = await model.update(id, requestBody)
     if (result) {

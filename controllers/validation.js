@@ -4,7 +4,7 @@ const {Validator,ValidationError} = require('jsonschema')
 const dog= require('../schemas/dog.schema.js')
 const dogFilter = require('../schemas/dogFilter.schema.js')
 const user = require('../schemas/user.schema.js')
-const company = require('../schemas/company.schema.js')
+const comment = require('../schemas/comment.schema.js')
 
 const v = new Validator()
 
@@ -84,4 +84,24 @@ exports.validateCompany = async(ctx,next) => {
         }
     }
 }
+
+exports.validateComment = async(ctx,next) => {
+    const validationOptions = {
+        throwError:true,
+        allowUnknownAttributes:false
+    }
+    const body = ctx.request.body
+    try{
+        v.validate(body,comment,validationOptions)
+        await next()
+    }catch(error){
+        if(error instanceof ValidationError){
+            ctx.body = error
+            ctx.status = 400
+        }else{
+            throw error
+        }
+    }
+}
+
 

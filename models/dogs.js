@@ -15,14 +15,19 @@ exports.getAllCount = async function (query={}) {
 
 
 exports.getAllByFilter = async function (query,{page, limit,order="id",sorting=-1}) {
-  let data = await db.run_query(collection,query, {
-    skip:(page-1)*limit,
-    sort:{
-      [order]:sorting
-    },
-    limit:limit,
+  
+  
+  let data = await db.run_aggregate(collection, [
+    {$lookup:{from:"breeds",localField:"breedID",foreignField:"id",as:"breed"}},
+    {$lookup:{from:"users",localField:"createdBy",foreignField:"id",as:"createBy"}},
+    {$unwind:{path:"$breed",preserveNullAndEmptyArrays:true}},
+    {$unwind:{path:"$createBy",preserveNullAndEmptyArrays:true}},
+    { $match:query},
+    { $sort: { [order]: sorting } },
+    { $skip: (page-1)*limit },
+    { $limit: limit },
     
-  })
+  ])
   return data
 }
 
