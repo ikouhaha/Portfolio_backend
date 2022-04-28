@@ -22,8 +22,6 @@ const static = require('koa-static-router')
 const cors = require('@koa/cors');
 
 
-
-console.log('COR_ORIGINS',process.env.COR_ORIGINS)
 const origin = process.env.COR_ORIGINS||'http://localhost:3000'
 const options = {
     origin: [origin]

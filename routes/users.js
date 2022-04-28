@@ -4,21 +4,20 @@ const companyModel = require('../models/company')
 const model = require('../models/users')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
+const authWithPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
-const { validateUser } = require('../controllers/validation')
+const { validateUser,validateUserProfile,validateUserPwd,validateUserGoogle } = require('../controllers/validation')
 
 router.get('/', auth, getAll)
 router.get('/:id([0-9]{1,})', auth, getById);
 router.post('/', validateUser, createUser) //for public user register, so without auth
-router.put('/:id([0-9]{1,})', auth, validateUser, updateUser)
-router.del('/:id([0-9]{1,})', auth, deleteUser)
-router.put('/p/:id([0-9]{1,})', auth, validateUser, updateUserPwd)
+router.put('/:id([0-9]{1,})', auth, validateUserProfile, updateUser)
+router.put('/connect/:id([0-9]{1,})', auth, validateUserGoogle, updateUser)
+// router.del('/:id([0-9]{1,})', auth, deleteUser)
+router.put('/p/:id([0-9]{1,})', auth, validateUserPwd, updateUserPwd)
 
-
-
-
-router.get('/profile', profile)
+router.get('/profile',authWithPublic, profile)
 
 async function profile(ctx, ext) {
   if (ctx.isAuthenticated()) {
@@ -102,30 +101,30 @@ async function createUser(ctx) {
 
 }
 
-async function deleteUser(ctx) {
+// async function deleteUser(ctx) {
 
-  try {
-    let id = parseInt(ctx.params.id)
-    const body = ctx.request.body
-    //check the role permission
-    const permission = can.delete(ctx.state.user, { "id": id })
-    if (!permission.granted) {
-      ctx.status = 403;
-      return;
-    }
-    let result = await model.deleteUser(id)
-    if (result) {
-      ctx.status = 201
-      ctx.body = result
-    } else {
-      ctx.status = 201
-      ctx.body = "{}"
-    }
-  } catch (ex) {
-    util.createErrorResponse(ctx, ex)
+//   try {
+//     let id = parseInt(ctx.params.id)
+//     const body = ctx.request.body
+//     //check the role permission
+//     const permission = can.delete(ctx.state.user, { "id": id })
+//     if (!permission.granted) {
+//       ctx.status = 403;
+//       return;
+//     }
+//     let result = await model.deleteUser(id)
+//     if (result) {
+//       ctx.status = 201
+//       ctx.body = result
+//     } else {
+//       ctx.status = 201
+//       ctx.body = "{}"
+//     }
+//   } catch (ex) {
+//     util.createErrorResponse(ctx, ex)
 
-  }
-}
+//   }
+// }
 
 async function updateUser(ctx) {
 
@@ -137,6 +136,17 @@ async function updateUser(ctx) {
     if (!permission.granted) {
       ctx.status = 403;
       return;
+    }
+
+    //bind the new google account
+    if(body.googleId){
+      //checking the googleid is used?
+      let googleId = await model.findByGoogleId(body.googleId)
+      if(googleId){
+        ctx.status = 400
+        ctx.body = "The google account is registered"
+        return
+      }
     }
 
 
