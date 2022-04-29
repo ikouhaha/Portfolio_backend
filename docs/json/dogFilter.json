@@ -2,6 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
         "dog": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
             "id": "/dog",
             "title": "Dog Filter",
             "description": "the request data of filter",

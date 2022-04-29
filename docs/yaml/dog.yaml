@@ -14,6 +14,8 @@ get:
   responses:
     '200':
       description: View of dog 
+    '400':
+      description: The request filter is not valid.
     '404':
       description: User was not found in the DB. 
     '500':
@@ -32,6 +34,8 @@ put:
   responses:
     '200':
       description: Update confirmation and link to record.
+    '400':
+      description: The request body is not valid.      
     '403':
       description: no permission to update the dog.
     '404':
@@ -41,7 +45,7 @@ put:
 delete:
   tags:
     - Dogs
-  description: Delete user by ID.
+  description: Delete dog by ID.
 responses:
     '200':
       description: Delete confirmation.

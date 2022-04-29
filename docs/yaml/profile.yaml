@@ -1,0 +1,14 @@
+get:
+  tags:
+    - Users
+  description:
+    Get the profile of the user
+  responses:
+    '200':
+      description: View of user's profile
+    '204':
+      description: No content found
+    '403':
+      description: no permission to view the user.
+    '500':
+      description: server error

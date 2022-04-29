@@ -17,7 +17,7 @@ router.put('/connect/:id([0-9]{1,})', auth, validateUserGoogle, updateUser)
 // router.del('/:id([0-9]{1,})', auth, deleteUser)
 router.put('/p/:id([0-9]{1,})', auth, validateUserPwd, updateUserPwd)
 
-router.get('/profile',authWithPublic, profile)
+router.get('/profile',auth, profile)
 
 async function profile(ctx, ext) {
   if (ctx.isAuthenticated()) {

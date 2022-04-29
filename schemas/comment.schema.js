@@ -15,7 +15,7 @@ module.exports = {
         },
         "comment": {
             "description": "The comment of dog",
-            'type': 'string'
+            "type": "string"
         },
         "commentDate": {
             "description": "The create date of comment",

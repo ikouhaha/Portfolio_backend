@@ -23,34 +23,22 @@ get:
 put:
   tags:
     - Users
-  description: Update user by ID.
+  description: Update user profile by ID.
   requestBody:
-    description: All new user data.
+    description: All change of user data.
     required: true
     content:
       application/json:
         schema:
-          $ref: ../json/user.json#/definitions/user
+          $ref: ../json/userProfile.json#/definitions/user
   responses:
     '200':
-      description: Update confirmation and link to record.
+      description: Update successfully.
+    '400':
+      description: The request body is not valid.
     '403':
       description: no permission to update the user.
     '404':
       description: Users was not found in the DB.
     '500':
       description: server error
-delete:
-  tags:
-    - Users
-  description: Delete user by ID.
-responses:
-    '200':
-      description: Delete confirmation.
-    '403':
-      description: no permission to delete the user.
-    '404':
-      description: User was not found in the DB.
-    '500':
-      description: server error
-

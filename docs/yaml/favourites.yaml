@@ -1,0 +1,12 @@
+get:
+  tags:
+    - Favourites
+  description:
+    Get all of the user's favourites
+  responses:
+    '200':
+      description: View of user's favourites
+    '403':
+      description: no permission to view the user favourites.
+    '500':
+      description: server error

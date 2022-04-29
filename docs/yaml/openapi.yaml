@@ -13,14 +13,16 @@ servers:
   - url: 'https://BScCOM-Blog-API-example.wongazta.repl.co'
     description: Development server
 tags:
-  - name: Companies
-    description: API endpoints for company management
   - name: Users
     description: API endpoints for user management.
   - name: Breeds
     description: Access and view breeds of the dog
   - name: Dogs
     description: API endpoints for dog management.
+  - name: Favourites
+    description: API endpoints for favourites view and like/unlike.
+  - name: Comments
+    description: API endpoints for guest and staff comment for the dog.
 paths:
   /companies:
     $ref: "./companies.yaml"
@@ -30,6 +32,12 @@ paths:
     $ref: "./users.yaml"
   /users/{id}:
     $ref: "./user.yaml"
+  /users/profile:
+    $ref: "./profile.yaml"
+  /users/connect/{id}:
+    $ref: "./userGoogle.yaml"    
+  /users/p/{id}:
+    $ref: "./userPwd.yaml" 
   /breeds:
     $ref: "./breeds.yaml"
   /breeds/{id}:
@@ -38,3 +46,13 @@ paths:
     $ref: "./dogs.yaml"
   /dogs/{id}:
     $ref: "./dog.yaml"
+  /dogs/image/{id}:
+    $ref: "./dogImage.yaml"
+  /favourites:
+    $ref: "./favourites.yaml"
+  /favourites/{dogId}/{isFavourite}:
+    $ref: "./favourite.yaml"
+  /comments/{dogId}:
+    $ref: "./comments.yaml"
+  /comments/:
+    $ref: "./comment.yaml"

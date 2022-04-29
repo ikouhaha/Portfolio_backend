@@ -2,44 +2,39 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
         "dog": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
             "id": "/dog",
             "title": "Dog",
             "description": "dog's information",
             "type": "object",
             "properties": {
-                "name": {
+                "name":{
                     "description": "The name of dog",
                     "type": "string"
                 },
-                "about": {
+                "about":{
                     "description": "The description of dog",
                     "type": "string"
                 },
-                "imageBase64": {
+                "imageBase64":{
                     "description": "The base64 format of image",
                     "type": "string"
                 },
-                "breedID": {
+                "breedID":{
                     "description": "The breed id of dog",
                     "type": "integer"
                 },
-                "createdBy": {
+                "createdBy":{
                     "description": "The dog information create by",
                     "type": "integer"
                 },
-                "companyCode": {
+                "companyCode":{
                     "description": "The code of the company and the dog available at their company ",
                     "type": "string"
                 }
             },
-            "required": [
-                "name",
-                "about",
-                "breedID",
-                "imageBase64",
-                "createdBy",
-                "companyCode"
-            ]
+            "required": ["name", "about","breedID","imageBase64","createdBy","companyCode"]
         }
     }
+        
 }
