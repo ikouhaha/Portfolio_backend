@@ -15,23 +15,25 @@ router.post('/google/token',passport.authenticate(['google-token'],{session:fals
 
 async function signin(ctx, next) {
   try {
-    
+   
     if (ctx.isAuthenticated()) {
       if(ctx.state.user.status){
+        //some error status when auth
         ctx.status = ctx.state.user.status
         ctx.message = ctx.state.user.message
         return
       }
       const token = await jwt.sign(ctx.state.user, config.SECRET, { expiresIn: config.TOKEN_EXPIRED });
-      const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
-      console.log("sign in successfully "+token)
+      
+      
       ctx.status = 200
-      ctx.body = user
+      ctx.body = 'Bearer ' + token
     } else {
       ctx.status = 401
     }
 
   } catch (ex) {
+    console.log(ex)
     util.createErrorResponse(ctx, ex)
 
   }
@@ -48,10 +50,9 @@ async function googleSigninByToken(ctx, next) {
         return
       }
       const token = await jwt.sign(ctx.state.user, config.SECRET, { expiresIn: config.TOKEN_EXPIRED });
-      const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
-      console.log("google sign in successfully "+token)
+
       ctx.status = 200
-      ctx.body = user
+      ctx.body = 'Bearer ' + token
 
 
     } else {

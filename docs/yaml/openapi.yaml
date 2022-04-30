@@ -13,6 +13,8 @@ servers:
   - url: 'https://BScCOM-Blog-API-example.wongazta.repl.co'
     description: Development server
 tags:
+  - name: Authentication
+    description: API endpoints for user login/logout.
   - name: Users
     description: API endpoints for user management.
   - name: Breeds
@@ -24,6 +26,56 @@ tags:
   - name: Comments
     description: API endpoints for guest and staff comment for the dog.
 paths:
+  /auth:
+    post:
+      tags:
+        - Authentication
+      description: API endpoints for user login by using basic authentication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+                schema:      # Response body contents
+                  type: object
+                examples:
+                  expect:  
+                    externalValue: '../responseJson/login.json'
+        '401':
+          description: Not authenticated   
+        '500':
+          description: Server error   
+  /google/token:
+    post:
+      tags:
+        - Authentication
+      description: API endpoints for user login by using google token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+                schema:      # Response body contents
+                  type: object
+                examples:
+                  expect:  
+                    externalValue: '../responseJson/login.json'          
+        '401':
+          description: Not authenticated 
+        '500':
+          description: Server error     
+  /logout:
+    get:
+      tags:
+        - Authentication
+      description: API endpoints for user logout 
+      auth:
+        route_name: auth
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Server error          
   /users:
     $ref: "./users.yaml"
   /users/{id}:
@@ -52,5 +104,13 @@ paths:
     $ref: "./favourite.yaml"
   /comments/{dogId}:
     $ref: "./comments.yaml"
-  /comments/:
+  /comments:
     $ref: "./comment.yaml"
+  
+
+
+# router.post('/',passport.authenticate(['basic'],{session:false}), signin)
+
+
+# router.get('/signout',signout)
+# router.post('/google/token',passport.authenticate(['google-token'],{session:false}), googleSigninByToken)

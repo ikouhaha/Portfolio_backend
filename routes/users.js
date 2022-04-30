@@ -22,7 +22,7 @@ router.get('/profile',auth, profile)
 async function profile(ctx, ext) {
   if (ctx.isAuthenticated()) {
     ctx.status = 200
-    const user = { ...ctx.state.user, isLogin: true }
+    const user = { ...ctx.state.user, isLogin: true,token:ctx.headers.authorization }
     delete user.googleId
     delete user.password
     ctx.body = user
@@ -74,7 +74,7 @@ async function createUser(ctx) {
     const body = ctx.request.body
     body.dateRegistered = new Date()
     body.password = util.getHash(body.password)
-    body.favourites = {}
+   
     if (body.role == "staff") {
       let company = await companyModel.findByCode(body.companyCode)
       if (!company) {

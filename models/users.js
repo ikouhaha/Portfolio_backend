@@ -36,6 +36,8 @@ exports.getById = async function (id) {
 
 
 exports.createUser = async function (user) {
+  //structuring the data
+  user.favourites = user.favourites|| {}
   let status = await db.run_insert(collection, user)
   return status
 }

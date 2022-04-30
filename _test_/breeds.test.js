@@ -3,11 +3,6 @@ const app = require('./common/index')
 const allBreedsExpected = require("../docs/responseJson/breeds.json")[0]
 const breedDetailExpected = require("../docs/responseJson/breed.json")
 
-
-
-
-const expected = {"_id": "American Foxhound", "id": 14, "name": "American Foxhound"}
-
 describe('Breeds Testing Cases', () => {
   it('Return all breeds', async() => {
     const res = await request(app.callback())
