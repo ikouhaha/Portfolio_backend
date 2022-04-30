@@ -19,8 +19,8 @@ put:
     description: All new dog data.
     required: true
   responses:
-    '200':
-      description: Update confirmation and link to record.
+    '201':
+      description: Update successfully.
     '403':
       description: no permission to like or unlike.
     '404':

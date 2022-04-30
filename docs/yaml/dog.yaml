@@ -14,6 +14,13 @@ get:
   responses:
     '200':
       description: View of dog 
+      content:
+        application/json:
+            schema:      # Response body contents
+              type: object
+            examples:
+              expect:  
+                externalValue: '../responseJson/dog.json'
     '400':
       description: The request filter is not valid.
     '404':

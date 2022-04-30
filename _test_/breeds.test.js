@@ -1,5 +1,10 @@
 const request = require('supertest')
 const app = require('./common/index')
+const allBreedsExpected = require("../docs/responseJson/breeds.json")[0]
+const breedDetailExpected = require("../docs/responseJson/breed.json")
+
+
+
 
 const expected = {"_id": "American Foxhound", "id": 14, "name": "American Foxhound"}
 
@@ -10,7 +15,7 @@ describe('Breeds Testing Cases', () => {
       .send({})
     expect(res.statusCode).toEqual(200)
     expect(res.type).toEqual("application/json")
-    expect(res.body).toContainEqual(expected)
+    expect(res.body).toContainEqual(allBreedsExpected)
     
   })
 
@@ -20,7 +25,7 @@ describe('Breeds Testing Cases', () => {
       .send()
     expect(res.statusCode).toEqual(200)
     expect(res.type).toEqual("application/json")
-    expect(res.body).toEqual(expected)
+    expect(res.body).toEqual(breedDetailExpected)
     
   })
   

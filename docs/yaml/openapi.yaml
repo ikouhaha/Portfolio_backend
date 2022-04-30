@@ -46,7 +46,7 @@ paths:
     $ref: "./dog.yaml"
   /dogs/image/{id}:
     $ref: "./dogImage.yaml"
-  /favourites:
+  /favourites/{filter}:
     $ref: "./favourites.yaml"
   /favourites/{dogId}/{isFavourite}:
     $ref: "./favourite.yaml"

@@ -1,43 +1,25 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "/user_profile",
-    "title": "User profile",
-    "description": "A user profile in the system",
-    "type": "object",
-    "properties": {
-        "firstName": {
-            "description": "The user's first name",
-            "type": "string"
-        },
-        "lastName": {
-            "description": "The user's last name",
-            "type": "string"
-        },
-        "about": {
-            "description": "about the user",
-            "type": "string"
-        },
-        "email": {
-            "description": "Create user email",
-            "type": "string",
-            "format": "email"
-        },
-        "role": {
-            "description": "the role of user",
-            "type": "string"
-        },
-        "googleId": {
-            "description": "for the google register user",
-            "type": "string"
-        },
-        "companyCode": {
-            "description": "the company register code",
-            "type": "string"
-        }
+    "_id": "6260cf6058cfd96a0e70bc23",
+    "bred_for": "Small rodent hunting, lapdog",
+    "breed_group": "Toy",
+    "height": {
+        "imperial": "9 - 11.5",
+        "metric": "23 - 29"
     },
-    "required": [
-        "username",
-        "email",
-        "role"
-    ]
+    "id": 1,
+    "image": {
+        "height": 1199,
+        "id": "BJa4kxc4X",
+        "url": "https://cdn2.thedogapi.com/images/BJa4kxc4X.jpg",
+        "width": 1600
+    },
+    "life_span": "10 - 12 years",
+    "name": "Affenpinscher",
+    "origin": "Germany, France",
+    "reference_image_id": "BJa4kxc4X",
+    "temperament": "Stubborn, Curious, Playful, Adventurous, Active, Fun-loving",
+    "weight": {
+        "imperial": "6 - 13",
+        "metric": "3 - 6"
+    }
 }

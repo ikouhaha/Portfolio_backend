@@ -6,6 +6,13 @@ get:
   responses:
     '200':
       description: View of users 
+      content:
+          application/json:
+              schema:      # Response body contents
+                type: object
+              examples:
+                expect:  
+                  externalValue: '../responseJson/users.json'      
     '403':
       description: no permission to view the users.
     '500':

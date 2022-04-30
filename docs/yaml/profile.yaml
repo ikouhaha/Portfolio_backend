@@ -6,6 +6,13 @@ get:
   responses:
     '200':
       description: View of user's profile
+      content:
+          application/json:
+              schema:      # Response body contents
+                type: object
+              examples:
+                expect:  
+                  externalValue: '../responseJson/userProfile.json'
     '204':
       description: No content found
     '403':

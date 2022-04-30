@@ -2,14 +2,17 @@ get:
   tags:
     - Breeds
   description:
-    Get all breeds.
+    Get all breeds name and id.
   responses:
     '200':
       description: View of breeds 
       content:
         application/json:
-            schema:      # Request body contents
-              $refs: ../responseJson/breed.json
+            schema:      # Response body contents
+              type: object
+            examples:
+              expect:  
+                externalValue: '../responseJson/breeds.json'
     '500':
       description: server error
 

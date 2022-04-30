@@ -4,10 +4,17 @@ get:
   tags:
     - Breeds
   description:
-    Get breed by id.
+    Get breed details by id.
   responses:
     '200':
-      description: View of breed 
+      description: View of breed detail 
+      content:
+        application/json:
+            schema:      # Response body contents
+              type: object
+            examples:
+              expect:  
+                externalValue: '../responseJson/breed.json'
     '404':
       description: Breed was not found in the DB. 
     '500':
