@@ -6,6 +6,10 @@ get:
   responses:
     '200':
       description: View of breeds 
+      content:
+        application/json:
+            schema:      # Request body contents
+              $refs: ../responseJson/breed.json
     '500':
       description: server error
 
