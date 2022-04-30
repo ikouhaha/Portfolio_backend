@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const router = Router({ prefix: '/api/v1/auth' })
 const util = require('../helpers/util')
 const passport = require('../helpers/passport.js')
-
+const config = require('../config')
 
 
 const jwt = require('jsonwebtoken');
@@ -15,14 +15,14 @@ router.post('/google/token',passport.authenticate(['google-token'],{session:fals
 
 async function signin(ctx, next) {
   try {
-    console.log(process.env.TOKEN_EXPIRED )
+    
     if (ctx.isAuthenticated()) {
       if(ctx.state.user.status){
         ctx.status = ctx.state.user.status
         ctx.message = ctx.state.user.message
         return
       }
-      const token = await jwt.sign(ctx.state.user, process.env.SECRET, { expiresIn: process.env.TOKEN_EXPIRED });
+      const token = await jwt.sign(ctx.state.user, config.SECRET, { expiresIn: config.TOKEN_EXPIRED });
       const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
       console.log("sign in successfully "+token)
       ctx.status = 200
@@ -40,14 +40,14 @@ async function signin(ctx, next) {
 async function googleSigninByToken(ctx, next) {
 
   try {
-    console.log(process.env.TOKEN_EXPIRED )
+    
     if (ctx.isAuthenticated()) {
       if(ctx.state.user.status){
         ctx.status = ctx.state.user.status
         ctx.message = ctx.state.user.message
         return
       }
-      const token = await jwt.sign(ctx.state.user, process.env.SECRET, { expiresIn: process.env.TOKEN_EXPIRED });
+      const token = await jwt.sign(ctx.state.user, config.SECRET, { expiresIn: config.TOKEN_EXPIRED });
       const user = {...ctx.state.user,isLogin:true,token: 'Bearer ' + token}
       console.log("google sign in successfully "+token)
       ctx.status = 200

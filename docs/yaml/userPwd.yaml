@@ -16,7 +16,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: ../json/userPwd.json#/definitions/user    
+          $ref: ../requestJson/userPwd.json
   responses:
     '201':
       description: update sccessfully   

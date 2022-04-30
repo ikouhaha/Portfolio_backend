@@ -24,10 +24,6 @@ tags:
   - name: Comments
     description: API endpoints for guest and staff comment for the dog.
 paths:
-  /companies:
-    $ref: "./companies.yaml"
-  /companies/{id}:
-    $ref: "./company.yaml"
   /users:
     $ref: "./users.yaml"
   /users/{id}:
@@ -44,6 +40,8 @@ paths:
     $ref: "./breed.yaml"
   /dogs:
     $ref: "./dogs.yaml"
+  /dogs/{filter}:
+    $ref: "./dogFilter.yaml"
   /dogs/{id}:
     $ref: "./dog.yaml"
   /dogs/image/{id}:

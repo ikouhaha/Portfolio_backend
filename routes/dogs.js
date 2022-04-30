@@ -14,6 +14,7 @@ const authWithPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/dogs' })
 const util = require('../helpers/util')
 const { validateDog, validateDogFilter } = require('../controllers/validation')
+const config = require('../config')
 
 
 //(ctx, next) => auth(ctx, next, true)
@@ -110,7 +111,7 @@ async function getAll(ctx, next) {
 async function getImageById(ctx, next) {
   const defaultImg = (ctx) => {
     //somthing wrong , return blank image
-    let blankImgBase64 = process.env.DEFAULT_IMAGE
+    let blankImgBase64 = config.DEFAULT_IMAGE
     const { type, image } = util.getImgByBase64(blankImgBase64)
     ctx.status = 200
     ctx.type = type

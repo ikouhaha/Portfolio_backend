@@ -3,7 +3,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-
+const config  = require('../config')
 
 
 exports.isEmpty = (value) => {
@@ -83,7 +83,7 @@ exports.getImgByBase64 = (str64) => {
 }
 
 
-exports.JWTverify = (token, secret = process.env.SECRET) => {
+exports.JWTverify = (token, secret = config.SECRET) => {
     return new Promise((resolve, reject) => {
         jwt.verify(token, secret, (err, decoded) => {
             if (err) {

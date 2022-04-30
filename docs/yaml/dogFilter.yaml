@@ -1,0 +1,28 @@
+parameters:
+  - in: path
+    name: filter
+    schema:
+      type: object
+    required: true
+    description: filter data of the dog 
+get:
+  tags:
+    - Dogs
+  description:
+    Get all dogs by filter. staff can view edit action if the dog's company match with staff.
+  responses:
+    '200':
+      description: View of dogs 
+    '500':
+      description: server error
+  parameters:
+    - in: query
+      name: filter
+      schema:
+          $ref: ../requestJson/dogFilter.json
+      required: true
+      description: filter data of the dogs
+      content:
+        application/json:
+          schema:
+            $ref: ../requestJson/dogFilter.json

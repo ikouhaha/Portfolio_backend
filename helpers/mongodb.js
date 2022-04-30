@@ -1,12 +1,13 @@
 const mongoClient = require("mongodb").MongoClient
+const config = require('../config')
+const mongo_username = config.DB_USER
+const mongo_password = config.DB_PWD
 
-const mongo_username = process.env.DB_USER
-const mongo_password = process.env.DB_PWD
-
-const CONNECTION_URI = `mongodb+srv://${mongo_username}:${mongo_password}@${process.env.DB_HOST}`
-const DATABASE_NAME = process.env.DB_NAME
+const CONNECTION_URI = `mongodb+srv://${mongo_username}:${mongo_password}@${config.DB_HOST}`
+const DATABASE_NAME = config.DB_NAME
 const util = require('../helpers/util')
 
+console.log(CONNECTION_URI)
 
 exports.run_query = async (collection, query = {}, options = { projection: null, sort: null, skip: null, limit: null }) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
@@ -28,7 +29,6 @@ exports.run_count = async (collection, query = {}) => {
 
 exports.run_aggregate = async (collection, options = [{ $sort:{} }, { $group }, { $lookup }, { $limit }, { $skip }, { $match },{$lookup},{$unwind}]) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)
-  console.log(options)
   const result = await dbClient.db(DATABASE_NAME).collection(collection).aggregate(options)
   let returnResult = await result.toArray()
   await dbClient.close()

@@ -30,7 +30,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: ../json/dog.json#/definitions/dog
+          $ref: ../requestJson/dog.json
   responses:
     '200':
       description: Update confirmation and link to record.

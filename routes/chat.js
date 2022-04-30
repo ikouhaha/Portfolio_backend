@@ -1,5 +1,6 @@
 
 
+const config = require('../config');
 const util = require('../helpers/util');
 const model = require('../models/messages')
 
@@ -29,7 +30,7 @@ module.exports = function Chat(io) {
                 id: socket.id,
                 firstName: 'Guest',
                 room: socket.id,
-                avatar: process.env.DEFAULT_IMAGE
+                avatar: config.DEFAULT_IMAGE
             }
         }
 

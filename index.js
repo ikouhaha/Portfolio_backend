@@ -14,6 +14,7 @@ const comments = require('./routes/comments')
 const company = require('./routes/companies')
 const favourites = require('./routes/favourites')
 const passport = require('./helpers/passport')
+const config = require('./config')
 
 
 const bodyParser = require('koa-bodyparser')
@@ -22,7 +23,7 @@ const static = require('koa-static-router')
 const cors = require('@koa/cors');
 
 
-const origin = process.env.COR_ORIGINS||'http://localhost:3000'
+const origin = config.COR_ORIGINS
 const options = {
     origin: [origin]
 
@@ -42,8 +43,8 @@ app.use(company.routes())
 app.use(favourites.routes())
 app.use(comments.routes())
 
-const port = process.env.PORT || 10888
-const host = process.env.HOST 
+const port = config.PORT
+const host = config.HOST
 
 console.log('host',host)
 console.log('port',port)

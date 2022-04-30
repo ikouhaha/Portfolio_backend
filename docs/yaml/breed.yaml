@@ -1,11 +1,5 @@
 
-parameters:
-  - in: path
-    name: id
-    schema:
-      type: integer
-    required: true
-    description: Numeric id of the breed
+
 get:
   tags:
     - Breeds
@@ -18,3 +12,10 @@ get:
       description: Breed was not found in the DB. 
     '500':
       description: server error   
+  parameters:
+  - in: path
+    name: id
+    schema:
+      type: integer
+    required: true
+    description: Numeric id of the breed

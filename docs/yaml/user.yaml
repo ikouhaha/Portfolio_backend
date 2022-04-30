@@ -30,7 +30,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: ../json/userProfile.json#/definitions/user
+          $ref: ../requestJson/userProfile.json#
   responses:
     '200':
       description: Update successfully.

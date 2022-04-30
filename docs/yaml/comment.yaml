@@ -12,7 +12,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: ../json/comment.json#/definitions/comment
+          $ref: ../requestJson/comment.json
   responses:
     '201':
       description: Comment created

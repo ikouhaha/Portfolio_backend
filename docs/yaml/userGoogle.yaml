@@ -16,7 +16,7 @@ put:
     content:
       application/json:
         schema:
-          $ref: ../json/userGoogle.json#/definitions/user    
+          $ref: ../requestJson/userGoogle.json
   responses:
     '201':
       description: update sccessfully

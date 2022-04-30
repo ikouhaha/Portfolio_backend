@@ -9,6 +9,7 @@ const auth = require('../controllers/auth')
 const router = Router({ prefix: '/api/v1/comments' })
 const util = require('../helpers/util')
 const { validateComment } = require('../controllers/validation')
+const config = require('../config')
 
 
 
@@ -66,7 +67,7 @@ async function getCommentByDogId(ctx, next) {
           result.avatar = result.user.avatarUrl
         } else {
           result.author = "Guest"
-          result.avatar = process.env.DEFAULT_IMAGE
+          result.avatar = config.DEFAULT_IMAGE
         }
         result.datetime = result.commentDate
 

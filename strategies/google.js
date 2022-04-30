@@ -1,6 +1,6 @@
 
 
-const info = require("../config")
+const config = require("../config")
 const util = require("../helpers/util")
 const GoogleTokenStrategy = require('passport-google-token').Strategy;
 const users = require('../models/users')
@@ -43,9 +43,9 @@ const authUser = async (accessToken, refreshToken, profile, done) => {
 }
 
 const strategy = new GoogleTokenStrategy({
-    clientID: info.config.googleClientID,
-    clientSecret: info.config.googleClientSecret,
-    callbackURL: info.config.googleCallbackURL,
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret: config.GOOGLE_CLIENT_SECRET
+    
     
 }, authUser
 )

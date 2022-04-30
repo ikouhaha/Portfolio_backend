@@ -1,4 +1,6 @@
+
 const Koa = require('koa')
+require('dotenv').config()
 
 const app = new Koa()
 
