@@ -28,7 +28,7 @@ const checkUser = async (jwt_payload, done) => {
         delete user.googleId
         return done(null, user)
     } else {
-        console.log(`No user found with username `)
+        //console.log(`No user found with username `)
     }
 
     return done(null, false) // token expired?

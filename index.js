@@ -46,10 +46,6 @@ app.use(comments.routes())
 const port = config.PORT
 const host = config.HOST
 
-console.log('host',host)
-console.log('port',port)
-console.log('watch7')
-
 
 let server
 if(host){

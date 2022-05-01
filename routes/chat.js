@@ -19,7 +19,7 @@ module.exports = function Chat(io) {
             let replaceToken = socket.handshake.query.token.replace('Bearer ', '')
             try {
                 user = await util.JWTverify(replaceToken)
-                // console.log(user)
+                
             } catch (ex) {
                 console.log(ex)
             }

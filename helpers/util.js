@@ -97,5 +97,3 @@ exports.JWTverify = (token, secret = config.SECRET) => {
 
 }
 
-
-//console.log(this.getHash("123"));

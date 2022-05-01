@@ -24,17 +24,17 @@ const checkUserAndPass = async (username, password, done) => {
         //security
       
         if (verifyPassword(user, password)) {
-            console.log(`Successfully authenticated user ${username}`)   
+            //console.log(`Successfully authenticated user ${username}`)   
             delete user.password
             delete user.googleId         
             return done(null, user)
         } else {
-            console.log(`Password incorrect for user ${username}`)
+            //console.log(`Password incorrect for user ${username}`)
             return done(null,{status:401,message:"Username or password incorrect"})
             
         }
     } else {
-        console.log(`No user found with username ${username}`)
+        //console.log(`No user found with username ${username}`)
         
         return done(null,{status:401,message:"No user found"})
     }   

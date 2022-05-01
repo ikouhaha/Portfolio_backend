@@ -4,7 +4,6 @@ const companyModel = require('../models/company')
 const model = require('../models/users')
 const can = require('../permission/user')
 const auth = require('../controllers/auth')
-const authWithPublic = require('../controllers/authWithPublic')
 const router = Router({ prefix: '/api/v1/users' })
 const util = require('../helpers/util')
 const { validateUser,validateUserProfile,validateUserPwd,validateUserGoogle } = require('../controllers/validation')
@@ -53,13 +52,15 @@ async function getAll(ctx) {
 async function getById(ctx) {
   try {
     let id = parseInt(ctx.params.id)
+   
     //check the role
     const permission = can.read(ctx.state.user, { "id": id })
     if (!permission.granted) {
       ctx.status = 403;
     } else {
       const result = await model.getById(id)
-      if (result.length) {
+      
+      if (result) {
         ctx.body = result;
       }
     }
@@ -72,9 +73,11 @@ async function getById(ctx) {
 async function createUser(ctx) {
   try {
     const body = ctx.request.body
+    console.log('body',body)
     body.dateRegistered = new Date()
     body.password = util.getHash(body.password)
-   
+    
+    
     if (body.role == "staff") {
       let company = await companyModel.findByCode(body.companyCode)
       if (!company) {

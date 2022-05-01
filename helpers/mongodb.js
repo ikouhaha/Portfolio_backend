@@ -7,7 +7,7 @@ const CONNECTION_URI = `mongodb+srv://${mongo_username}:${mongo_password}@${conf
 const DATABASE_NAME = config.DB_NAME
 const util = require('../helpers/util')
 
-console.log(CONNECTION_URI)
+
 
 exports.run_query = async (collection, query = {}, options = { projection: null, sort: null, skip: null, limit: null }) => {
   const dbClient = await mongoClient.connect(CONNECTION_URI)

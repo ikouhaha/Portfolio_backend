@@ -11,7 +11,7 @@ describe('Authentication Testing Cases', () => {
       .post('/api/v1/auth')
       .auth('admin', '123')
       .send({})
-    console.log(res)
+    
     expect(res.statusCode).toEqual(200)
     expect(res.type).toEqual("text/plain")
     expect(res.text).toContain("Bearer")
