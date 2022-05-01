@@ -3,34 +3,31 @@ const app = require('./common/index')
 const helper = require('./common/helper')
 
 
-const randomName = () => (Math.random() + 1).toString(36).substring(7)
-
-
 const expected = {
-  "_id": "62681ec3a690ed84f53fe15f",
+  "_id": "6251d239cb156bbe336eb6e4",
   "name": expect.any(String),
   "about": expect.any(String),
   "breedID": expect.any(Number),
   "imageBase64": expect.any(String),
-  "createdBy": 71,
+  "createdBy": 1,
   "companyCode": "7df96371-eac9-40b2-a734-1cf4a8ba433f",
-  "id": 87,
+  "id": 80,
   "breed": expect.any(Object),
-  "createBy": expect.any(Object)
+  
 }
 
 const expectedInner = {
-  "_id": "62681ec3a690ed84f53fe15f",
+  "_id": "6251d239cb156bbe336eb6e4",
   "name": expect.any(String),
   "about": expect.any(String),
   "breedID": expect.any(Number),
   "imageBase64": expect.any(String),
-  "createdBy": 71,
+  "createdBy": 1,
   "companyCode": "7df96371-eac9-40b2-a734-1cf4a8ba433f",
-  "id": 87,
+  "id": 80,
   "breed": expect.any(Object),
-  "createBy": expect.any(Object),
-  "comments": expect.any(Array)
+  "comments": expect.any(Array),
+  "createBy": expect.any(Object)
 }
 
 
@@ -72,7 +69,7 @@ describe('Dogs Testing Cases', () => {
 
   it('Return the specified dogs', async () => {
     const res = await request(app.callback())
-      .get('/api/v1/dogs/87')      
+      .get('/api/v1/dogs/80')      
       .send({})
 
     expect(res.statusCode).toEqual(200)
@@ -84,7 +81,7 @@ describe('Dogs Testing Cases', () => {
   it('Return the specified dogs and test staff action', async () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
     const res = await request(app.callback())
-      .get('/api/v1/dogs/87')     
+      .get('/api/v1/dogs/80')     
       .set({ Authorization: token }) 
       .send({})
     //ensure the staff have permission to edit
@@ -137,7 +134,7 @@ describe('Dogs Testing Cases', () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
     console.log('token', token)
     const res = await request(app.callback())
-      .delete('/api/v1/dogs/38')
+      .del('/api/v1/dogs/38/7df96371-eac9-40b2-a734-1cf4a8ba433f')
       .set({ Authorization: token })
       .send({})
 
@@ -145,91 +142,16 @@ describe('Dogs Testing Cases', () => {
     expect(res.type).toEqual("application/json")
   })
 
-  xit("change user's profile", async () => {
-    const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-
+  it("get the dog's image load", async () => {
     const res = await request(app.callback())
-      .put('/api/v1/users/71')
-      .set({ Authorization: token })
-      .send({ firstName: "Dennis test123", username: "ikouhaha999", companyCode: "7df96371-eac9-40b2-a734-1cf4a8ba433f", email: "ikouhaha999@gmail.com", "role": "staff" })
+      .get('/api/v1/dogs/image/71')
+      .send()
 
-    expect(res.statusCode).toEqual(201)
-    expect(res.type).toEqual("application/json")
+    expect(res.statusCode).toEqual(200)
+    expect(res.type).toEqual("image/jpg")
 
 
   })
 
-
-  it("change user's pwd", async () => {
-    const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-
-    const res = await request(app.callback())
-      .put('/api/v1/users/p/71')
-      .set({ Authorization: token })
-      .send({ password: "123" })
-
-    expect(res.statusCode).toEqual(201)
-    expect(res.type).toEqual("application/json")
-
-
-  })
-
-  xit("Connect with google test", async () => {
-    const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-
-    const res = await request(app.callback())
-      .put('/api/v1/users/connect/71')
-      .set({ Authorization: token })
-      .send({ avatarUrl: "https://lh3.googleusercontent.com/a/AATXAJwx1Xg_pxBWwoCNbG_u-lvz24ZLjtZxpFoBVTZt=s96-c", googleId: parseInt(Math.random() * 99999999999).toString() }) //mockgoogleid
-
-    expect(res.statusCode).toEqual(201)
-    expect(res.type).toEqual("application/json")
-
-
-  })
-
-
-
-  xit('create a new users', async () => {
-
-    //public user register
-    const res = await request(app.callback())
-      .post('/api/v1/users')
-      .send({
-        "email": randomName() + "@example.com",
-        "password": "123",
-        "username": randomName(),
-        "firstName": "",
-        "lastName": "",
-        "role": "user",
-        "companyCode": "",
-      })
-
-    expect(res.statusCode).toEqual(201)
-    expect(res.type).toEqual("application/json")
-
-
-  })
-
-  xit('create a new staff', async () => {
-
-    //public user register
-    const res = await request(app.callback())
-      .post('/api/v1/users')
-      .send({
-        "email": randomName() + "@example.com",
-        "password": "123",
-        "username": randomName(),
-        "firstName": "",
-        "lastName": "",
-        "role": "staff",
-        "companyCode": "7df96371-eac9-40b2-a734-1cf4a8ba433f",
-      })
-
-    expect(res.statusCode).toEqual(201)
-    expect(res.type).toEqual("application/json")
-
-
-  })
 
 })
