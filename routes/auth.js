@@ -4,7 +4,7 @@ const util = require('../helpers/util')
 const passport = require('../helpers/passport.js')
 const config = require('../config')
 
-
+const a =  1
 const jwt = require('jsonwebtoken');
 
 router.post('/',passport.authenticate(['basic'],{session:false}), signin)

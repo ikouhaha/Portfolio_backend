@@ -60,7 +60,7 @@ describe('Users Testing Cases', () => {
 
   it('Return the specified users', async () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-    console.log('token', token)
+    
     const res = await request(app.callback())
       .get('/api/v1/users/71')
       .set({ Authorization: token })
@@ -74,7 +74,7 @@ describe('Users Testing Cases', () => {
 
   it("Return the user's profile", async () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-    console.log('token', token)
+    
     const res = await request(app.callback())
       .get('/api/v1/users/profile')
       .set({ Authorization: token })

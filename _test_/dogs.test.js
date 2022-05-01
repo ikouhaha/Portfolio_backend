@@ -94,7 +94,7 @@ describe('Dogs Testing Cases', () => {
 
   it("create a new dog", async () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-    console.log('token', token)
+    
     const res = await request(app.callback())
       .post('/api/v1/dogs')
       .set({ Authorization: token })
@@ -113,7 +113,7 @@ describe('Dogs Testing Cases', () => {
 
   it("update the dog's information", async () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-    console.log('token', token)
+    
     const res = await request(app.callback())
       .put('/api/v1/dogs/37')
       .set({ Authorization: token })
@@ -132,7 +132,7 @@ describe('Dogs Testing Cases', () => {
 
   it("delete the dog", async () => {
     const token = await helper.getLoginToken(request(app.callback()), "ikouhaha999", "123")
-    console.log('token', token)
+    
     const res = await request(app.callback())
       .del('/api/v1/dogs/38/7df96371-eac9-40b2-a734-1cf4a8ba433f')
       .set({ Authorization: token })

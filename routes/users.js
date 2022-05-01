@@ -73,7 +73,7 @@ async function getById(ctx) {
 async function createUser(ctx) {
   try {
     const body = ctx.request.body
-    console.log('body',body)
+    
     body.dateRegistered = new Date()
     body.password = util.getHash(body.password)
     
