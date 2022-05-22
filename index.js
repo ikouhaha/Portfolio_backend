@@ -48,12 +48,16 @@ const host = config.HOST
 
 
 let server
-if(host){
-    server = app.listen(port,host)
-}else{
+if (host) {
+    server = app.listen(port, host)
+} else {
     server = app.listen(port)
 }
 
-const io = socketIo(server, { cors: { origin: origin } });
+const io = socketIo(server, { 
+    perMessageDeflate: false,
+    cors: { origin: origin },
+    //transports: ["websocket","polling"] 
+});
 
 chat(io)
